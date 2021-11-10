@@ -50,21 +50,21 @@ class HexagonalModule:
 
 
 class HexagonalSanityCheck:
-    _onion_modules_dirs_names = List[str]
+    _hexa_modules_dirs_names = List[str]
     _source_folder_full_path: str
     _source_folder: str
 
     def check(self, _source_folder: str = '') -> List[HexagonalError]:
         self._source_folder_full_path = os.path.abspath(_source_folder)
         self._source_folder = self._source_folder_full_path.split('/')[-1]
-        self._onion_modules_dirs_names = self._get_onion_module_dirs(
+        self._hexa_modules_dirs_names = self._get_hexa_module_dirs(
             source_folder=_source_folder)
 
-        onion_python_files = self._get_python_file_in_source_folder()
+        python_files = self._get_python_file_in_source_folder()
 
         errors = []
-        for python_file in onion_python_files:
-            error = self._check_onion_dependencies_order(
+        for python_file in python_files:
+            error = self._check_dependencies_order(
                 python_file=python_file)
             if error:
                 errors.append(error)
@@ -72,7 +72,7 @@ class HexagonalSanityCheck:
         return errors
 
     @staticmethod
-    def _get_onion_module_dirs(source_folder: str) -> List[str]:
+    def _get_hexa_module_dirs(source_folder: str) -> List[str]:
         source_dir_name = source_folder.split('/')[-1]
         all_dirs = [source_dir_name]
         for layer in hexagonal_composition:
@@ -85,10 +85,10 @@ class HexagonalSanityCheck:
         python_files = [os.path.abspath(y) for x in os.walk(
             self._source_folder_full_path) for y in glob(os.path.join(x[0], '*.py'))]
         for python_file in python_files:
-            onion_python_file = PythonFile(
+            python_file = PythonFile(
                 source_module_dir=self._source_folder_full_path, file_full_path=python_file)
-            if onion_python_file.layer_index is not None:
-                valid_files.append(onion_python_file)
+            if python_file.layer_index is not None:
+                valid_files.append(python_file)
 
         valid_files.sort(
             key=lambda valid_file: valid_file.layer_index, reverse=True)
@@ -102,38 +102,37 @@ class HexagonalSanityCheck:
 
         all_modules = list(finder.modules.keys()) + \
             list(finder.badmodules.keys())
-        onion_modules = [module for module in all_modules if
-                         any([module.startswith(valid_dir) for valid_dir in self._onion_modules_dirs_names])]
+        hexa_modules = [module for module in all_modules if
+                         any([module.startswith(valid_dir) for valid_dir in self._hexa_modules_dirs_names])]
 
-        for module in onion_modules:
-            onion_module = HexagonalModule(
+        for module in hexa_modules:
+            hexagonal_module = HexagonalModule(
                 layer_index=None, module=module, layer_name='')
 
             if module.startswith(self._source_folder):
                 module = module.replace(f'{self._source_folder}.', '')
             layer_name = module.split('.')[0]
-            onion_module.layer_name = layer_name
+            hexagonal_module.layer_name = layer_name
 
-            onion_module.layer_index = HexagonalComposition.get_layer_index_by_module_name(
+            hexagonal_module.layer_index = HexagonalComposition.get_layer_index_by_module_name(
                 layer_name)
 
-            if onion_module.layer_index is None:
+            if hexagonal_module.layer_index is None:
                 continue
 
-            valid_modules.append(onion_module)
+            valid_modules.append(hexagonal_module)
 
         valid_modules.sort(
             key=lambda valid_module: valid_module.layer_index, reverse=True)
 
         return valid_modules
 
-    def _check_onion_dependencies_order(self, python_file: PythonFile) -> Optional[HexagonalError]:
-
+    def _check_dependencies_order(self, python_file: PythonFile) -> Optional[HexagonalError]:
         imported_modules = self._get_modules_used_in_python_file(
             python_file=python_file)
         for imported_module in imported_modules:
             if python_file.layer_index > imported_module.layer_index:
-                return HexagonalError(message='Wrong dependency flow. An inner onion layer is pointing to an outer onion layer.',
+                return HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
                                       outer_layer_name=imported_module.layer_name,
                                       inner_layer_name=python_file.module_name,
                                       python_file_problem=python_file.relative_path_from_source_module,

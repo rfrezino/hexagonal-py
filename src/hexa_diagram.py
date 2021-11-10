@@ -6,7 +6,7 @@ from src.hexa_sanity_check import HexagonalComposition
 
 def generate_diagram():
     last_node = None
-    with Diagram('Onion Architecture Diagram'):
+    with Diagram('Hexagonal Architecture Diagram'):
         for layer in HexagonalComposition:
             with Cluster(layer.name):
                 is_first = True
