@@ -1,13 +1,13 @@
 from diagrams import Cluster, Diagram
 from diagrams.aws.storage import Storage
 
-from src.hexa_sanity_check import HexagonalComposition
+from src.hexa_sanity_check import hexagonal_composition
 
 
 def generate_diagram():
     last_node = None
     with Diagram('Hexagonal Architecture Diagram'):
-        for layer in HexagonalComposition:
+        for layer in hexagonal_composition:
             with Cluster(layer.name):
                 is_first = True
                 for module in layer.directories:
