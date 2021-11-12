@@ -57,8 +57,7 @@ class HexagonalSanityCheck:
     def check(self, _source_folder: str = '') -> List[HexagonalError]:
         self._source_folder_full_path = os.path.abspath(_source_folder)
         self._source_folder = self._source_folder_full_path.split('/')[-1]
-        self._hexa_modules_dirs_names = self._get_hexa_module_dirs(
-            source_folder=_source_folder)
+        self._hexa_modules_dirs_names = self._get_hexa_module_dirs(source_folder=_source_folder)
 
         python_files = self._get_python_file_in_source_folder()
 
@@ -107,8 +106,8 @@ class HexagonalSanityCheck:
         for module in hexa_modules:
             hexagonal_module = HexagonalModule(layer_index=None, module=module, layer_name='')
 
-            if module.startswith(self._source_folder):
-                module = module.replace(f'{self._source_folder}.', '')
+            if self._source_folder in module:
+                module = module.split(f'{self._source_folder}.')[1]
 
             layer_name = module.split('.')[0]
             hexagonal_module.layer_name = layer_name

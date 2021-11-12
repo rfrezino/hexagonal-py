@@ -4,7 +4,7 @@ import unittest
 
 from src.hexa_commands import run_command
 from src.hexa_layer import HexagonalLayer
-from src.hexa_sanity_check import HexagonalSanityCheck
+from src.hexa_sanity_check import HexagonalError, HexagonalSanityCheck
 
 
 class HexagonalSanityCheckUnitTest(TestCase):
@@ -19,7 +19,15 @@ class HexagonalSanityCheckUnitTest(TestCase):
 
         checker = HexagonalSanityCheck()
         errors = checker.check('./tests/test_projects/wrong_project/')
-        self.assertEqual(len(errors), 0)
+        self.assertEqual(errors, 
+                         [HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.', 
+                                         outer_layer_name='infrastructure', 
+                                         inner_layer_name='usecases', 
+                                         python_file_problem='usecases/create_person_usecase.py', 
+                                         imported_module_problem='tests.test_projects.wrong_project.infrastructure.person_mysql_repository')])
+        
+
+        
 
     def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
         # Project Onion Architecture Structure
