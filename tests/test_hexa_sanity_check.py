@@ -24,19 +24,19 @@ class HexagonalSanityCheckUnitTest(TestCase):
                                          inner_layer_name='usecases',
                                          python_file_problem='usecases/create_person_usecase.py',
                                          imported_module_problem='tests.test_projects.wrong_project.infrastructure.person_mysql_repository')])
-    #
-    # def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
-    #     infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
-    #     use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])
-    #     services_layer = HexagonalLayer(name='services', directories=['services'])
-    #     domain_layer = HexagonalLayer(name='domain', directories=['domain'])
-    #
-    #     hexagonal_composition = HexagonalComposition()
-    #     hexagonal_composition + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer
-    #
-    #     checker = HexagonalSanityCheck()
-    #     errors = checker.check('./tests/test_projects/correct_project/')
-    #     self.assertEqual(len(errors), 0)
+
+    def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
+        infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
+        use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])
+        services_layer = HexagonalLayer(name='services', directories=['services'])
+        domain_layer = HexagonalLayer(name='domain', directories=['domain'])
+
+        hexagonal_composition = HexagonalComposition()
+        hexagonal_composition + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer
+
+        checker = HexagonalSanityCheck()
+        errors = checker.check(composition=hexagonal_composition, source_folder='./test_projects/correct_project/')
+        self.assertEqual(len(errors), 0)
 
     # def test_generate_diagram(self):Î
     #     infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
