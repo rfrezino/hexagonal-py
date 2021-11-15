@@ -4,30 +4,10 @@ from glob import glob
 from modulefinder import ModuleFinder
 from typing import List, Optional
 
-from src.hexa_layer import hexagonal_composition
-
-
-@dataclass
-class HexagonalError:
-    message: str
-    outer_layer_name: str
-    inner_layer_name: str
-    python_file_problem: str
-    imported_module_problem: str
-
-
-class PythonFile:
-    file_name: str
-    full_path: str
-    relative_path_from_source_module: str
-    module_name: str
-    layer_index: Optional[int]
-
-    def __init__(self, source_module_dir: str, file_full_path: str):
-        self.full_path = file_full_path
-        self.relative_path_from_source_module = file_full_path.replace(source_module_dir + '/', '')
-        self.module_name = self.relative_path_from_source_module.split('/')[0]
-        self.layer_index = HexagonalComposition.get_layer_index_by_module_name(self.module_name)
+from services.hexagonal_composition import HexagonalComposition
+from domain.hexagonal_error import HexagonalError
+from domain.hexagonal_module import HexagonalModule
+from domain.python_file import PythonFile
 
 
 @dataclass
@@ -36,32 +16,18 @@ class SanityCheckResponse:
     HexagonalErrors: List[HexagonalError]
 
 
-class HexagonalComposition:
-    @staticmethod
-    def get_layer_index_by_module_name(module: str) -> Optional[int]:
-        for idx, layer in enumerate(hexagonal_composition):
-            if module in layer.directories:
-                return idx
-
-        return None
-
-
-@dataclass
-class HexagonalModule:
-    layer_index: Optional[int]
-    module: str
-    layer_name: str
-
-
 class HexagonalSanityCheck:
     _hexa_modules_dirs_names = List[str]
     _source_folder_full_path: str
     _source_folder: str
+    _composition: HexagonalComposition
 
-    def check(self, _source_folder: str = '') -> List[HexagonalError]:
-        self._source_folder_full_path = os.path.abspath(_source_folder)
+    def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> List[HexagonalError]:
+        self._source_folder_full_path = os.path.abspath(source_folder)
+        self._composition = composition
         self._source_folder = self._source_folder_full_path.split('/')[-1]
-        self._hexa_modules_dirs_names = self._get_hexa_module_dirs(source_folder=_source_folder)
+        self._hexa_modules_dirs_names = self._get_hexa_module_dirs(source_folder=source_folder)
+
 
         python_files = self._get_python_file_in_source_folder()
 
@@ -73,11 +39,10 @@ class HexagonalSanityCheck:
 
         return errors
 
-    @staticmethod
-    def _get_hexa_module_dirs(source_folder: str) -> List[str]:
+    def _get_hexa_module_dirs(self, source_folder: str) -> List[str]:
         source_dir_name = source_folder.split('/')[-1]
         all_dirs = [source_dir_name]
-        for layer in hexagonal_composition:
+        for layer in self._composition:
             all_dirs += layer.directories
 
         return all_dirs

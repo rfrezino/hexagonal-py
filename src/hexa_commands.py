@@ -1,5 +1,5 @@
-from src.hexa_diagram import generate_diagram
-from src.hexa_sanity_check import HexagonalError, HexagonalSanityCheck
+from domain.hexagonal_error import HexagonalError
+from use_cases.check_project_sanity_usecase import HexagonalSanityCheck
 
 
 def print_error(error_index: int, error: HexagonalError):

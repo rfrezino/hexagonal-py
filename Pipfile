@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 diagrams = "*"
+nose = "*"
 
 [dev-packages]
 autopep8 = "*"
