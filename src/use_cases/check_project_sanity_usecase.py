@@ -52,7 +52,7 @@ class CheckProjectSanityUseCase:
         python_files = [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
                         for y in glob(os.path.join(x[0], '*.py'))]
         for python_file in python_files:
-            python_file = PythonFileBuilder.build(source_module_dir=self._source_folder_full_path,
+            python_file = PythonFileBuilder.build(project_full_path=self._source_folder_full_path,
                                                   file_full_path=python_file,
                                                   composition=self._composition)
 
