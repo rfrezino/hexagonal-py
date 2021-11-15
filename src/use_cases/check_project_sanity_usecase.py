@@ -23,11 +23,10 @@ class HexagonalSanityCheck:
     _composition: HexagonalComposition
 
     def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> List[HexagonalError]:
-        self._source_folder_full_path = os.path.abspath(source_folder)
         self._composition = composition
+        self._source_folder_full_path = os.path.abspath(source_folder)
         self._source_folder = self._source_folder_full_path.split('/')[-1]
         self._hexa_modules_dirs_names = self._get_hexa_module_dirs(source_folder=source_folder)
-
 
         python_files = self._get_python_file_in_source_folder()
 
@@ -52,7 +51,8 @@ class HexagonalSanityCheck:
         python_files = [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
                         for y in glob(os.path.join(x[0], '*.py'))]
         for python_file in python_files:
-            python_file = PythonFile(source_module_dir=self._source_folder_full_path, file_full_path=python_file)
+            python_file = PythonFile(source_module_dir=self._source_folder_full_path, file_full_path=python_file,
+                                     hexagonal_composition=self._composition)
 
             if python_file.layer_index is not None:
                 valid_files.append(python_file)
@@ -79,7 +79,7 @@ class HexagonalSanityCheck:
 
             layer_name = module.split('.')[0]
             hexagonal_module.layer_name = layer_name
-            hexagonal_module.layer_index = HexagonalComposition.get_layer_index_by_module_name(layer_name)
+            hexagonal_module.layer_index = self._composition.get_layer_index_by_module_name(module=layer_name)
 
             if hexagonal_module.layer_index is None:
                 continue

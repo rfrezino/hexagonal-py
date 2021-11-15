@@ -1,9 +1,10 @@
+import typing
 from typing import List, Optional
 
 from domain.hexagonal_layer import HexagonalLayer
 
 
-class HexagonalComposition(List[HexagonalLayer]):
+class HexagonalComposition(typing.List[HexagonalLayer]):
 
     def get_layer_index_by_module_name(self, module: str) -> Optional[int]:
         for idx, layer in enumerate(self):

@@ -17,7 +17,7 @@ class HexagonalSanityCheckUnitTest(TestCase):
         hexagonal_composition + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer
 
         checker = HexagonalSanityCheck()
-        errors = checker.check(composition=hexagonal_composition, source_folder='./tests/test_projects/wrong_project/')
+        errors = checker.check(composition=hexagonal_composition, source_folder='./test_projects/wrong_project/')
         self.assertEqual(errors,
                          [HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
                                          outer_layer_name='infrastructure',
