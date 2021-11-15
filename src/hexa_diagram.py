@@ -4,7 +4,7 @@ from diagrams.aws.storage import Storage
 from src.hexa_sanity_check import hexagonal_composition
 
 
-def generate_diagram():
+def generate_diagram() -> bool:
     last_node = None
     with Diagram('Hexagonal Architecture Diagram'):
         for layer in hexagonal_composition:
@@ -18,3 +18,7 @@ def generate_diagram():
                             last_node >> cur_node
 
                     last_node = cur_node
+
+    return last_node is not None
+
+

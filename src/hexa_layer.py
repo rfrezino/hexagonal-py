@@ -9,6 +9,10 @@ class HexagonalLayer:
     name: str
     directories: List[str]
 
+    @staticmethod
+    def clear():
+        hexagonal_composition.clear()
+
     def __rshift__(self, next_layer: 'HexagonalLayer') -> 'HexagonalLayer':
         if not hexagonal_composition:
             hexagonal_composition.append(self)

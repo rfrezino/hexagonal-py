@@ -25,11 +25,15 @@ class PythonFile:
 
     def __init__(self, source_module_dir: str, file_full_path: str):
         self.full_path = file_full_path
-        self.relative_path_from_source_module = file_full_path.replace(
-            source_module_dir + '/', '')
+        self.relative_path_from_source_module = file_full_path.replace(source_module_dir + '/', '')
         self.module_name = self.relative_path_from_source_module.split('/')[0]
-        self.layer_index = HexagonalComposition.get_layer_index_by_module_name(
-            self.module_name)
+        self.layer_index = HexagonalComposition.get_layer_index_by_module_name(self.module_name)
+
+
+@dataclass
+class SanityCheckResponse:
+    FilesChecked: List[PythonFile]
+    HexagonalErrors: List[HexagonalError]
 
 
 class HexagonalComposition:
@@ -83,8 +87,8 @@ class HexagonalSanityCheck:
         python_files = [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
                         for y in glob(os.path.join(x[0], '*.py'))]
         for python_file in python_files:
-            python_file = PythonFile(
-                source_module_dir=self._source_folder_full_path, file_full_path=python_file)
+            python_file = PythonFile(source_module_dir=self._source_folder_full_path, file_full_path=python_file)
+
             if python_file.layer_index is not None:
                 valid_files.append(python_file)
 
@@ -98,8 +102,7 @@ class HexagonalSanityCheck:
         finder = ModuleFinder(path=[self._source_folder_full_path])
         finder.run_script(python_file.full_path)
 
-        all_modules = list(finder.modules.keys()) + \
-            list(finder.badmodules.keys())
+        all_modules = list(finder.modules.keys()) + list(finder.badmodules.keys())
         hexa_modules = [module for module in all_modules if
                         any([module.startswith(valid_dir) for valid_dir in self._hexa_modules_dirs_names])]
 
@@ -124,7 +127,7 @@ class HexagonalSanityCheck:
 
     def _check_dependencies_order(self, python_file: PythonFile) -> Optional[HexagonalError]:
         imported_modules = self._get_modules_used_in_python_file(python_file=python_file)
-        
+
         for imported_module in imported_modules:
             if python_file.layer_index > imported_module.layer_index:
                 return HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
