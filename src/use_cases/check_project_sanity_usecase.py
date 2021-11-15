@@ -99,7 +99,7 @@ class CheckProjectSanityUseCase:
             if python_file.layer_index > imported_module.layer_index:
                 return HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
                                       outer_layer_name=imported_module.layer_name,
-                                      inner_layer_name=python_file.module_name,
+                                      inner_layer_name=python_file.layer_name,
                                       python_file_problem=python_file.relative_path_from_source_module,
                                       imported_module_problem=imported_module.module)
 
