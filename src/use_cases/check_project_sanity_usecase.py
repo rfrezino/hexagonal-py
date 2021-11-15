@@ -8,6 +8,7 @@ from services.hexagonal_composition import HexagonalComposition
 from domain.hexagonal_error import HexagonalError
 from domain.hexagonal_module import HexagonalModule
 from domain.python_file import PythonFile
+from services.python_file_builder import PythonFileBuilder
 
 
 @dataclass
@@ -51,8 +52,9 @@ class HexagonalSanityCheck:
         python_files = [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
                         for y in glob(os.path.join(x[0], '*.py'))]
         for python_file in python_files:
-            python_file = PythonFile(source_module_dir=self._source_folder_full_path, file_full_path=python_file,
-                                     hexagonal_composition=self._composition)
+            python_file = PythonFileBuilder.build(source_module_dir=self._source_folder_full_path,
+                                                  file_full_path=python_file,
+                                                  composition=self._composition)
 
             if python_file.layer_index is not None:
                 valid_files.append(python_file)
