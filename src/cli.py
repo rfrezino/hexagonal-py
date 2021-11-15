@@ -1,5 +1,5 @@
 from domain.hexagonal_error import HexagonalError
-from use_cases.check_project_sanity_usecase import HexagonalSanityCheck
+from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
 
 
 def print_error(error_index: int, error: HexagonalError):
@@ -20,7 +20,7 @@ def run_command(command: str):
     if command == 'diagram':
         generate_diagram()
     elif command == 'check':
-        checker = HexagonalSanityCheck()
+        checker = CheckProjectSanityUseCase()
         errors = checker.check('src/')
 
         [print_error(index, error) for index, error in enumerate(errors)]

@@ -1,5 +1,5 @@
-from tests.test_projects.correct_project.domain.person import Person
-from tests.test_projects.correct_project.services.person_repository import PersonRepository
+from tests.use_cases.test_projects.correct_project.domain.person import Person
+from tests.use_cases.test_projects.correct_project.services.person_repository import PersonRepository
 
 
 class CreatePersonUseCase():

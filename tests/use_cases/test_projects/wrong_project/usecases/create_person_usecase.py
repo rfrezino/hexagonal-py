@@ -1,5 +1,5 @@
-from tests.test_projects.wrong_project.domain.person import Person
-from tests.test_projects.wrong_project.infrastructure.person_mysql_repository import PersonMySqlRepository
+from tests.use_cases.test_projects.wrong_project.domain.person import Person
+from tests.use_cases.test_projects.wrong_project.infrastructure.person_mysql_repository import PersonMySqlRepository
 
 
 class CreatePersonUseCase():

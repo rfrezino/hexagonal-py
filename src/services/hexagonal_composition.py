@@ -1,5 +1,5 @@
 import typing
-from typing import List, Optional
+from typing import Optional
 
 from domain.hexagonal_layer import HexagonalLayer
 
@@ -12,9 +12,6 @@ class HexagonalComposition(typing.List[HexagonalLayer]):
                 return idx
 
         return None
-
-    def add_inner_layer(self, layer: HexagonalLayer):
-        self.append(layer)
 
     def __add__(self, next_layer: HexagonalLayer) -> 'HexagonalComposition':
         self.clear()

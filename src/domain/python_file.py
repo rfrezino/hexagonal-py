@@ -1,8 +1,8 @@
-import dataclasses
+from dataclasses import dataclass
 from typing import Optional
 
 
-@dataclasses.dataclass
+@dataclass
 class PythonFile:
     file_name: str
     full_path: str

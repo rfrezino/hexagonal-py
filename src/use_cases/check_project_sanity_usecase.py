@@ -17,7 +17,7 @@ class SanityCheckResponse:
     HexagonalErrors: List[HexagonalError]
 
 
-class HexagonalSanityCheck:
+class CheckProjectSanityUseCase:
     _hexa_modules_dirs_names = List[str]
     _source_folder_full_path: str
     _source_folder: str

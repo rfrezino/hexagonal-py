@@ -9,9 +9,9 @@ from domain.hexagonal_layer import HexagonalLayer
 class GenerateDiagramUseCase:
 
     @staticmethod
-    def execute(hexagonal_composition: List[HexagonalLayer]) -> bool:
+    def execute(*, project_name: str, hexagonal_composition: List[HexagonalLayer]) -> bool:
         last_node = None
-        with Diagram('Hexagonal Architecture Diagram'):
+        with Diagram(project_name):
             for layer in hexagonal_composition:
                 with Cluster(layer.name):
                     is_first = True
