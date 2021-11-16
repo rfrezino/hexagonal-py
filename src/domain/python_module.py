@@ -3,7 +3,7 @@ from typing import Optional
 
 
 @dataclass
-class HexagonalModule:
+class PythonModule:
     layer_index: Optional[int]
     module: str
     layer_name: str

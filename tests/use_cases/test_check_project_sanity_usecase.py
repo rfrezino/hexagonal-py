@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-from domain.hexagonal_error import HexagonalError
 from domain.hexagonal_layer import HexagonalLayer
 from services.hexagonal_composition import HexagonalComposition
 from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
@@ -18,12 +17,13 @@ class HexagonalSanityCheckUnitTest(TestCase):
 
         usecase = CheckProjectSanityUseCase()
         errors = usecase.check(composition=hexagonal_composition, source_folder='./test_projects/wrong_project/')
-        self.assertEqual(errors,
-                         [HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
-                                         outer_layer_name='infrastructure',
-                                         inner_layer_name='usecases',
-                                         python_file_problem='usecases/create_person_usecase.py',
-                                         imported_module_problem='tests.use_cases.test_projects.wrong_project.infrastructure.person_mysql_repository')])
+        self.assertEqual(len(errors), 1)
+        self.assertEqual(errors[0].message, 'Wrong dependency flow. An inner layer is pointing to an outer layer.')
+        self.assertEqual(errors[0].outer_layer_name, 'infrastructure')
+        self.assertEqual(errors[0].inner_layer_name, 'usecases')
+        self.assertEqual(errors[0].python_file_problem, 'usecases/create_person_usecase.py')
+        self.assertTrue(errors[0].imported_module_problem.endswith(
+            'tests/use_cases/test_projects/wrong_project/infrastructure/person_mysql_repository.py'))
 
     def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
         infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
