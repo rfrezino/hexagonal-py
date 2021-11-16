@@ -73,24 +73,24 @@ class PythonFileBuilder:
         valid_modules = []
         all_modules = self._get_all_modules_source_paths(file_full_path=file_full_path)
 
-        hexa_modules = [module for module in all_modules if
-                        any([f'/{valid_dir}/' in module for valid_dir in self._used_local_modules])]
+        imported_sources_from_layers = [module for module in all_modules if
+                                        any([f'/{valid_dir}/' in module for valid_dir in self._used_local_modules])]
 
-        for module in hexa_modules:
-            hexagonal_module = PythonModule(layer_index=None, module=module, layer_name='')
+        for imported_source in imported_sources_from_layers:
+            hexagonal_module = PythonModule(layer_index=None, module=imported_source, layer_name='')
+            self._set_layer_information(hexagonal_module, imported_source)
 
-            if self._project_full_path in module:
-                module = module.split(f'{self._project_full_path}/')[1]
+            if hexagonal_module.layer_index is not None:
+                valid_modules.append(hexagonal_module)
 
-            layer_name = module.split('/')[0]
-            hexagonal_module.layer_name = layer_name
-            hexagonal_module.layer_index = self._composition.get_layer_index_by_module_name(module=layer_name)
 
-            if hexagonal_module.layer_index is None:
-                continue
-
-            valid_modules.append(hexagonal_module)
 
         valid_modules.sort(key=lambda valid_module: valid_module.layer_index, reverse=True)
-
         return valid_modules
+
+    def _set_layer_information(self, hexagonal_module, imported_source):
+        if self._project_full_path in imported_source:
+            imported_source = imported_source.split(f'{self._project_full_path}/')[1]
+        layer_name = imported_source.split('/')[0]
+        hexagonal_module.layer_name = layer_name
+        hexagonal_module.layer_index = self._composition.get_layer_index_by_module_name(module=layer_name)

@@ -1,8 +1,17 @@
+import importlib.util
+import sys
+
+import click
+
 from domain.hexagonal_error import HexagonalError
+from services.hexagonal_composition import HexagonalComposition
 from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
+from use_cases.generate_diagram_usecase import GenerateDiagramUseCase
+
+hexagonal_composition = HexagonalComposition()
 
 
-def print_error(error_index: int, error: HexagonalError):
+def _print_error(error_index: int, error: HexagonalError):
     if error_index == 0:
         print('')
         print('#' * 100)
@@ -16,17 +25,57 @@ def print_error(error_index: int, error: HexagonalError):
     print(f'    Outer Module : {error.imported_module_problem}')
 
 
-def run_command(command: str):
-    if command == 'diagram':
-        generate_diagram()
-    elif command == 'check':
-        checker = CheckProjectSanityUseCase()
-        errors = checker.check('src/')
+@click.group(help='Options for Hexagonal Sanity Check')
+def cli():
+    pass
 
-        [print_error(index, error) for index, error in enumerate(errors)]
-        if len(errors) > 0:
-            raise Exception('Hexagonal Architecture: Errors found in dependencies flow')
 
-        print('Hexagonal Architecture: No errors found')
-    else:
-        print(f'Command "{command}" not found. Did you mean `diagram` or `check`?')
+def _load_module(file_name, module_name):
+    spec = importlib.util.spec_from_file_location(module_name, file_name)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+@click.command()
+@click.option('--config_file', default='hexagonal_config.py', help='Where is Hexagonal config is set.')
+def diagram(config_file: str):
+    diagram = GenerateDiagramUseCase()
+
+    import importlib
+    # importlib.import_module(config_file, package='./src/')
+
+    my_module = _load_module(config_file, 'src')
+
+    diagram.execute(project_name='Hexagonal Architecture Diagram',
+                    hexagonal_composition=hexagonal_composition)
+
+
+# csanity check
+# # # unit tests
+# # # deploy test enritonemtn
+# # # migration DB acceptance
+# # # deploy acceptane
+
+
+
+
+@click.command()
+@click.option('--source', default='src/', help='Where main source folder is located.')
+def run_check(command: str):
+    checker = CheckProjectSanityUseCase()
+    errors = checker.check(composition=hexagonal_composition, source_folder='src/')
+
+    [_print_error(index, error) for index, error in enumerate(errors)]
+    if len(errors) > 0:
+        raise Exception('Hexagonal Architecture: Errors found in dependencies flow')
+
+    print('Hexagonal Architecture: No errors found')
+
+
+cli.add_command(run_check)
+cli.add_command(diagram)
+
+if __name__ == '__main__':
+    cli()
