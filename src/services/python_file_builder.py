@@ -42,7 +42,8 @@ class PythonFileBuilder:
 
         return all_dirs
 
-    def _convert_bad_modules_into_paths(self, base_file_full_path: str, bad_modules: List[str]) -> List[str]:
+    @staticmethod
+    def _convert_bad_modules_into_paths(base_file_full_path: str, bad_modules: List[str]) -> List[str]:
         result = []
         for bad_module in bad_modules:
             bad_module_file = bad_module.replace('.', '/') + '.py'
@@ -56,17 +57,21 @@ class PythonFileBuilder:
 
         return result
 
-    def _get_modules_imported_in_python_file(self, *, file_full_path: str) -> List[PythonModule]:
-        valid_modules = []
+    def _get_all_modules_source_paths(self, file_full_path: str) -> List[str]:
         finder = ModuleFinder(path=[self._project_full_path])
         finder.run_script(file_full_path)
 
-        all_modules: List[str] = []
+        all_modules = []
         for module in finder.modules.values():
             all_modules.append(module.__file__)
 
         all_modules.extend(self._convert_bad_modules_into_paths(base_file_full_path=file_full_path,
                                                                 bad_modules=list(finder.badmodules.keys())))
+        return all_modules
+
+    def _get_modules_imported_in_python_file(self, *, file_full_path: str) -> List[PythonModule]:
+        valid_modules = []
+        all_modules = self._get_all_modules_source_paths(file_full_path=file_full_path)
 
         hexa_modules = [module for module in all_modules if
                         any([f'/{valid_dir}/' in module for valid_dir in self._used_local_modules])]
