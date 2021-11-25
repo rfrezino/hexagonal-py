@@ -1,6 +1,8 @@
 import importlib.util
 import sys
 
+import click
+
 from domain.hexagonal_error import HexagonalError
 from services.hexagonal_composition import HexagonalComposition
 from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase

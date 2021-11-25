@@ -17,3 +17,7 @@ nose = "^1.3.7"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+# [tool.poetry.scripts]
+# poetry = 'poetry.console:run' use at some point it to install things
+# Here, we will have the poetry script installed which will execute console.run in the poetry package.
