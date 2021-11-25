@@ -16,7 +16,8 @@ class TestPythonFileBuilder(TestCase):
         composition + layer_use_case
 
         # Execute
-        python_file = PythonFileBuilder.build(
+        builder = PythonFileBuilder()
+        python_file = builder.build(
             project_full_path=project_full_path,
             file_full_path=file_full_path,
             composition=composition

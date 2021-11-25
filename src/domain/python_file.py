@@ -1,5 +1,7 @@
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, List
+
+from domain.python_module import PythonModule
 
 
 @dataclass
@@ -8,3 +10,4 @@ class PythonFile:
     relative_path_from_source_module: str
     layer_name: str
     layer_index: Optional[int]
+    imported_modules: List[PythonModule]
