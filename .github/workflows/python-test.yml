@@ -24,6 +24,6 @@ jobs:
           pip install build
           python -m pip install poetry
       - name: Run Tests
-        run: nosetests -v
+        run: nosetests -v ./
 
 
