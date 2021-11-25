@@ -11,7 +11,7 @@ class HexagonalSanityCheckUnitTest(TestCase):
         return __file__.split('/tests/')[0] + '/tests/'
 
     def test_check_when_project_has_wrong_dependencies_import_return_errors(self):
-        expected_project_full_path = self._get_tests_folder_path() + 'use_cases/test_projects/wrong_project'
+        expected_project_full_path = self._get_tests_folder_path() + 'unit_tests/use_cases/test_projects/wrong_project'
 
         infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
         use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])
@@ -37,6 +37,8 @@ class HexagonalSanityCheckUnitTest(TestCase):
             'tests/use_cases/test_projects/wrong_project/infrastructure/person_mysql_repository.py'))
 
     def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
+        expected_project_full_path = self._get_tests_folder_path() + 'unit_tests/use_cases/test_projects/correct_project'
+
         infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
         use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])
         services_layer = HexagonalLayer(name='services', directories=['services'])
@@ -46,5 +48,8 @@ class HexagonalSanityCheckUnitTest(TestCase):
         hexagonal_composition + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer
 
         usecase = CheckProjectSanityUseCase()
-        response = usecase.check(composition=hexagonal_composition, source_folder='./test_projects/correct_project/')
+        response = usecase.check(composition=hexagonal_composition, source_folder=expected_project_full_path)
+
+        self.assertEqual(len(response.project.python_files), 8)
+        self.assertEqual(response.project.full_path, expected_project_full_path)
         self.assertEqual(len(response.errors), 0)
