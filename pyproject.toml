@@ -2,7 +2,7 @@
 name = "hexagonal-sanity-check"
 version = "0.0.13"
 description = """Hexagonal Sanity Check"""
-
+readme = 'README.md'
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
 packages = [{ include = "*", from = "src" }]
 
