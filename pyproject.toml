@@ -1,11 +1,7 @@
 [tool.poetry]
 name = "hexagonal-sanity-check"
 version = "0.0.1"
-description = """Hexagonal Sanity Check
-=========================================
-
-If you are adopting Hexagonal Architecture into your project,
-you can force the correct usage of dependencies through the layers."""
+description = """Hexagonal Sanity Check"""
 
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
 packages = [{ include = "*", from = "src" }]
