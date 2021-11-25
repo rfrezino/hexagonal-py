@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
+from domain.hexagonal_check_response import HexagonalCheckResponse
 from domain.hexagonal_error import HexagonalError
 from domain.python_file import PythonFile
 from services.hexagonal_composition import HexagonalComposition
@@ -19,7 +20,7 @@ class CheckProjectSanityUseCase:
     _source_folder: str
     _composition: HexagonalComposition
 
-    def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> List[HexagonalError]:
+    def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> HexagonalCheckResponse:
         importer = PythonProjectImporter()
         python_project = importer.import_project(source_folder=source_folder, composition=composition)
 
@@ -31,9 +32,14 @@ class CheckProjectSanityUseCase:
             if error:
                 errors.append(error)
 
-        return errors
+        result = HexagonalCheckResponse()
+        result.errors = errors
+        result.project = python_project
 
-    def _check_dependencies_order(self, python_file: PythonFile) -> Optional[HexagonalError]:
+        return result
+
+    @staticmethod
+    def _check_dependencies_order(python_file: PythonFile) -> Optional[HexagonalError]:
         for imported_module in python_file.imported_modules:
             if python_file.layer_index > imported_module.layer_index:
                 return HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',

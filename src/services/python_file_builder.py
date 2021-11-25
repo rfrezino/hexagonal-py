@@ -70,6 +70,9 @@ class PythonFileBuilder:
         return all_modules
 
     def _get_modules_imported_in_python_file(self, *, file_full_path: str) -> List[PythonModule]:
+        if not os.path.exists(file_full_path):
+            return []
+
         valid_modules = []
         all_modules = self._get_all_modules_source_paths(file_full_path=file_full_path)
 
@@ -82,8 +85,6 @@ class PythonFileBuilder:
 
             if hexagonal_module.layer_index is not None:
                 valid_modules.append(hexagonal_module)
-
-
 
         valid_modules.sort(key=lambda valid_module: valid_module.layer_index, reverse=True)
         return valid_modules

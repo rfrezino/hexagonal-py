@@ -18,7 +18,7 @@ class PythonProjectImporter:
 
         python_files = self._get_python_file_in_source_folder()
 
-        return PythonProject(python_files=python_files)
+        return PythonProject(full_path=self._source_folder_full_path, python_files=python_files)
 
     def _get_python_file_in_source_folder(self) -> List[PythonFile]:
         valid_files = []
