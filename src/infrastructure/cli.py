@@ -1,4 +1,5 @@
 import importlib.util
+import os
 import sys
 
 import click
@@ -13,16 +14,16 @@ hexagonal_composition = HexagonalComposition()
 
 def _print_error(error_index: int, error: HexagonalError):
     if error_index == 0:
-        print('')
-        print('#' * 100)
-        print('## Hexagonal Architecture errors found:')
-        print('## First fix the [ERROR 1] and re-run the check. '
+        click.echo('')
+        click.echo('#' * 100)
+        click.echo('## Hexagonal Architecture errors found:')
+        click.echo('## First fix the [ERROR 1] and re-run the check. '
               'Follows errors can be cascading from it. \n')
 
-    print(f'[ERROR {error_index + 1}] Hexagonal Architecture: {error.message}')
-    print(f'    Wrong flow: {error.inner_layer_name} -> {error.outer_layer_name}')
-    print(f'    Python file: {error.python_file_problem}')
-    print(f'    Outer Module : {error.imported_module_problem}')
+    click.echo(f'[ERROR {error_index + 1}] Hexagonal Architecture: {error.message}')
+    click.echo(f'    Wrong flow: {error.inner_layer_name} -> {error.outer_layer_name}')
+    click.echo(f'    Python file: {error.python_file_problem}')
+    click.echo(f'    Outer Module : {error.imported_module_problem}')
 
 
 @click.group(help='Options for Hexagonal Sanity Check')
@@ -52,16 +53,27 @@ def diagram(config_file: str):
 
 
 @click.command()
-@click.option('--source', default='src/', help='Where main source folder is located.')
-def run_check(command: str):
-    checker = CheckProjectSanityUseCase()
-    response = checker.check(composition=hexagonal_composition, source_folder='src/')
+@click.option('--source_path', default='src/', help='Where main source folder is located.', required=True)
+def run_check(source_path):
+    source_path = os.path.abspath(source_path)
+    click.echo(f'Checking project at: {source_path}')
+
+    if not os.path.isdir(source_path):
+        click.echo('Project folder not found.')
+        exit(1)
+
+    try:
+        checker = CheckProjectSanityUseCase()
+        response = checker.check(composition=hexagonal_composition, source_folder=source_path)
+    except Exception as error:
+        click.echo(f'Error while processing project: "{error}"')
+        exit(1)
 
     [_print_error(index, error) for index, error in enumerate(response.errors)]
     if len(response.errors) > 0:
         raise Exception('Hexagonal Architecture: Errors found in dependencies flow.')
 
-    print('Hexagonal Architecture: No errors found.')
+    click.echo('Hexagonal Architecture: No errors found.')
 
 
 cli.add_command(run_check)
