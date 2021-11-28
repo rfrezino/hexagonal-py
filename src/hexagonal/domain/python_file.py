@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional, List
 
-from domain.python_module import PythonModule
+from hexagonal.domain.python_module import PythonModule
 
 
 @dataclass

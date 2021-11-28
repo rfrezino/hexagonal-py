@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from domain.hexagonal_layer import HexagonalLayer
-from services.hexagonal_composition import HexagonalComposition
-from services.python_file_builder import PythonFileBuilder
+from hexagonal.domain.hexagonal_layer import HexagonalLayer
+from hexagonal.services.hexagonal_composition import HexagonalComposition
+from hexagonal.services.python_file_builder import PythonFileBuilder
 
 
 class TestPythonFileBuilder(TestCase):

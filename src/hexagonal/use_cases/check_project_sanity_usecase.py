@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from typing import List, Optional
 
-from domain.hexagonal_check_response import HexagonalCheckResponse
-from domain.hexagonal_error import HexagonalError
-from domain.python_file import PythonFile
-from services.hexagonal_composition import HexagonalComposition
-from services.python_project_importer import PythonProjectImporter
+from hexagonal.domain.hexagonal_check_response import HexagonalCheckResponse
+from hexagonal.domain.hexagonal_error import HexagonalError
+from hexagonal.domain.python_file import PythonFile
+from hexagonal.services.hexagonal_composition import HexagonalComposition
+from hexagonal.services.python_project_importer import PythonProjectImporter
 
 
 @dataclass

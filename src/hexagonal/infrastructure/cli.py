@@ -5,10 +5,10 @@ from runpy import run_path
 
 import click
 
-from domain.hexagonal_error import HexagonalError
-from main import hexagonal_config
-from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
-from use_cases.generate_diagram_usecase import GenerateDiagramUseCase
+from hexagonal.domain.hexagonal_error import HexagonalError
+from hexagonal.main import hexagonal_config
+from hexagonal.use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
+from hexagonal.use_cases.generate_diagram_usecase import GenerateDiagramUseCase
 
 
 @click.group(help='Options for Hexagonal Sanity Check')
@@ -94,6 +94,12 @@ def _process_cli_arguments(source_path: str, hexagonal_config_file: str):
 cli.add_command(run_check)
 cli.add_command(diagram)
 
-if __name__ == '__main__':
+
+def main():
+    print('chegou')
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout, level=logging.DEBUG)
     cli()
+
+
+if __name__ == '__main__':
+    main()

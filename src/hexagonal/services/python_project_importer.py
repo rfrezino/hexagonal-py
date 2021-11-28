@@ -3,10 +3,10 @@ import os
 from glob import glob
 from typing import List, Optional
 
-from domain.python_file import PythonFile
-from domain.python_project import PythonProject
-from services.hexagonal_composition import HexagonalComposition
-from services.python_file_builder import PythonFileBuilder
+from hexagonal.domain.python_file import PythonFile
+from hexagonal.domain.python_project import PythonProject
+from hexagonal.services.hexagonal_composition import HexagonalComposition
+from hexagonal.services.python_file_builder import PythonFileBuilder
 
 
 class PythonProjectImporter:

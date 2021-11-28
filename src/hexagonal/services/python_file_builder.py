@@ -2,9 +2,9 @@ import os.path
 from modulefinder import ModuleFinder
 from typing import List
 
-from domain.python_file import PythonFile
-from domain.python_module import PythonModule
-from services.hexagonal_composition import HexagonalComposition
+from hexagonal.domain.python_file import PythonFile
+from hexagonal.domain.python_module import PythonModule
+from hexagonal.services.hexagonal_composition import HexagonalComposition
 
 
 class PythonFileBuilder:

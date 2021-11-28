@@ -3,7 +3,7 @@ from typing import List
 from diagrams import Diagram, Cluster
 from diagrams.aws.storage import Storage
 
-from domain.hexagonal_layer import HexagonalLayer
+from hexagonal.domain.hexagonal_layer import HexagonalLayer
 
 
 class GenerateDiagramUseCase:

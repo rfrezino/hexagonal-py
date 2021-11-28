@@ -1,7 +1,7 @@
 import typing
 from typing import Optional
 
-from domain.hexagonal_layer import HexagonalLayer
+from hexagonal.domain.hexagonal_layer import HexagonalLayer
 
 
 class HexagonalComposition(typing.List[HexagonalLayer]):

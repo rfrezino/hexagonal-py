@@ -3,9 +3,9 @@ from tempfile import TemporaryDirectory
 from time import sleep
 from unittest import TestCase
 
-from domain.hexagonal_layer import HexagonalLayer
-from services.hexagonal_composition import HexagonalComposition
-from use_cases.generate_diagram_usecase import GenerateDiagramUseCase
+from hexagonal.domain.hexagonal_layer import HexagonalLayer
+from hexagonal.services.hexagonal_composition import HexagonalComposition
+from hexagonal.use_cases.generate_diagram_usecase import GenerateDiagramUseCase
 
 
 class TestGenerateDiagramUseCase(TestCase):

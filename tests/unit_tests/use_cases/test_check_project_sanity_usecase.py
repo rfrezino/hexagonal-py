@@ -1,9 +1,9 @@
 from unittest import TestCase
 
-from domain.hexagonal_layer import HexagonalLayer
-from services.hexagonal_composition import HexagonalComposition
+from hexagonal.domain.hexagonal_layer import HexagonalLayer
+from hexagonal.services.hexagonal_composition import HexagonalComposition
+from hexagonal.use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
 from tests.utils import get_sample_wrong_test_project_path, get_sample_correct_test_project_path
-from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
 
 
 class HexagonalSanityCheckUnitTest(TestCase):
