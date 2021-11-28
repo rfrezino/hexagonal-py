@@ -1,3 +1,3 @@
-from src import HexagonalComposition
+from services.hexagonal_composition import HexagonalComposition
 
 hexagonal_config = HexagonalComposition()
