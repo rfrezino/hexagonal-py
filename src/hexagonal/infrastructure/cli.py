@@ -96,8 +96,7 @@ cli.add_command(diagram)
 
 
 def main():
-    print('chegou')
-    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout, level=logging.DEBUG)
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout, level=logging.ERROR)
     cli()
 
 

@@ -4,8 +4,9 @@ version = "0.0.15"
 description = """Hexagonal Sanity Check"""
 readme = 'README.md'
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
-packages = [{ include = "hexagonal", from = "src" , exclude="hexagonal_config.py"}]
+packages = [{ include = "hexagonal", from = "src"}]
 keywords = ["hexagonal architecture", "onion architecture", "enforce rules"]
+exclude = ["src/hexagonal/hexagonal_config.py"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
