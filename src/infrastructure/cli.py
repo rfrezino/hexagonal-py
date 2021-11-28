@@ -46,7 +46,8 @@ def run_check(source_path, hexagonal_config_file):
 
     [_print_error(index, error) for index, error in enumerate(response.errors)]
     if len(response.errors) > 0:
-        raise Exception('Hexagonal Architecture: Errors found in dependencies flow.')
+        logging.error('Hexagonal Architecture: Errors found in dependencies flow.')
+        exit(1)
 
     click.echo('Hexagonal Architecture: No errors found.')
 
