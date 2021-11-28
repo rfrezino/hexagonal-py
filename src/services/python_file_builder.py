@@ -31,11 +31,11 @@ class PythonFileBuilder:
                           imported_modules=python_modules)
 
     def _get_python_project_local_modules(self, source_folder: str) -> List[str]:
+        if '/' not in source_folder:
+            return []
+
         source_dir_name = source_folder.split('/')[-1]
-        if source_dir_name == '__init__.py':
-            all_dirs = []
-        else:
-            all_dirs = [source_dir_name]
+        all_dirs = [source_dir_name]
 
         for layer in self._composition:
             all_dirs += layer.directories
@@ -67,7 +67,8 @@ class PythonFileBuilder:
 
         all_modules.extend(self._convert_bad_modules_into_paths(base_file_full_path=file_full_path,
                                                                 bad_modules=list(finder.badmodules.keys())))
-        return all_modules
+
+        return list(filter(lambda value: value is not None, all_modules))
 
     def _get_modules_imported_in_python_file(self, *, file_full_path: str) -> List[PythonModule]:
         if not os.path.exists(file_full_path):

@@ -24,10 +24,8 @@ class CheckProjectSanityUseCase:
         importer = PythonProjectImporter()
         python_project = importer.import_project(source_folder=source_folder, composition=composition)
 
-        python_files = python_project.python_files
-
         errors = []
-        for python_file in python_files:
+        for python_file in python_project.python_files:
             error = self._check_dependencies_order(python_file=python_file)
             if error:
                 errors.append(error)

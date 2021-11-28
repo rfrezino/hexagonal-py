@@ -1,4 +1,5 @@
 import importlib.util
+import logging
 import os
 import sys
 
@@ -18,7 +19,7 @@ def _print_error(error_index: int, error: HexagonalError):
         click.echo('#' * 100)
         click.echo('## Hexagonal Architecture errors found:')
         click.echo('## First fix the [ERROR 1] and re-run the check. '
-              'Follows errors can be cascading from it. \n')
+                   'Follows errors can be cascading from it. \n')
 
     click.echo(f'[ERROR {error_index + 1}] Hexagonal Architecture: {error.message}')
     click.echo(f'    Wrong flow: {error.inner_layer_name} -> {error.outer_layer_name}')
@@ -62,6 +63,8 @@ def run_check(source_path):
         click.echo('Project folder not found.')
         exit(1)
 
+    sys.path.append(source_path)
+
     try:
         checker = CheckProjectSanityUseCase()
         response = checker.check(composition=hexagonal_composition, source_folder=source_path)
@@ -80,4 +83,5 @@ cli.add_command(run_check)
 cli.add_command(diagram)
 
 if __name__ == '__main__':
+    logging.basicConfig(format='%(process)d-%(levelname)s-%(message)s')
     cli()

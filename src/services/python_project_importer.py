@@ -1,3 +1,4 @@
+import logging
 import os
 from glob import glob
 from typing import List, Optional
@@ -25,11 +26,11 @@ class PythonProjectImporter:
                 for y in glob(os.path.join(x[0], '*.py'))]
 
     def _import_python_file(self, file: str) -> Optional[PythonFile]:
+        logging.info(f'Importing {file}')
         python_file_builder = PythonFileBuilder()
-        python_file = python_file_builder.build(project_full_path=self._source_folder_full_path,
-                                                file_full_path=file,
-                                                composition=self._composition)
-        return python_file
+        return python_file_builder.build(project_full_path=self._source_folder_full_path,
+                                         file_full_path=file,
+                                         composition=self._composition)
 
     def _import_python_files(self) -> List[PythonFile]:
         valid_files = []
