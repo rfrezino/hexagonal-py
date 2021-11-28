@@ -34,7 +34,6 @@ class PythonProjectImporter:
 
     def _import_python_files(self) -> List[PythonFile]:
         valid_files = []
-
         python_source_files = self._get_python_files_in_source_folder()
 
         for python_file in python_source_files:

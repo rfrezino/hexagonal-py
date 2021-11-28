@@ -83,5 +83,5 @@ cli.add_command(run_check)
 cli.add_command(diagram)
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(process)d-%(levelname)s-%(message)s')
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout, level=logging.DEBUG)
     cli()
