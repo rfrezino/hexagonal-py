@@ -3,7 +3,11 @@
 This project checks if the dependency flow between the layers of the Hexagonal architecture defined 
 for this project was respected.
 
-### How to configure
+### How to install
+
+It can be easily installed via pip: `pip install hexagonal-sanity-check`
+
+### How to configure your project
 
 First it's necessary to define your hexagonal layers and their order.
 The tool expects a default file name on your source folder dir with the name `hexagonal_config.py`.
