@@ -38,8 +38,11 @@ class PythonProjectImporter:
 
         for python_file in python_source_files:
             python_file = self._import_python_file(python_file)
-            if python_file.layer_index is not None:
-                valid_files.append(python_file)
+            if python_file.layer_index is None:
+                logging.warning(f'File layer index is invalid: {python_file.full_path}')
+                continue
+
+            valid_files.append(python_file)
 
         valid_files.sort(key=lambda valid_file: valid_file.layer_index, reverse=True)
         return valid_files

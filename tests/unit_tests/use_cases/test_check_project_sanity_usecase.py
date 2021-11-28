@@ -2,16 +2,13 @@ from unittest import TestCase
 
 from domain.hexagonal_layer import HexagonalLayer
 from services.hexagonal_composition import HexagonalComposition
+from tests.utils import get_sample_wrong_test_project_path, get_sample_correct_test_project_path
 from use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
 
 
 class HexagonalSanityCheckUnitTest(TestCase):
-    @staticmethod
-    def _get_tests_folder_path() -> str:
-        return __file__.split('/tests/')[0] + '/tests/'
-
     def test_check_when_project_has_wrong_dependencies_import_return_errors(self):
-        expected_project_full_path = self._get_tests_folder_path() + 'unit_tests/use_cases/test_projects/wrong_project'
+        expected_project_full_path = get_sample_wrong_test_project_path()
 
         infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
         use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])
@@ -34,10 +31,10 @@ class HexagonalSanityCheckUnitTest(TestCase):
         self.assertEqual(response.errors[0].inner_layer_name, 'usecases')
         self.assertEqual(response.errors[0].python_file_problem, 'usecases/create_person_usecase.py')
         self.assertTrue(response.errors[0].imported_module_problem.endswith(
-            'tests/use_cases/test_projects/wrong_project/infrastructure/person_mysql_repository.py'))
+            'test_projects/wrong_project/infrastructure/person_mysql_repository.py'))
 
     def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
-        expected_project_full_path = self._get_tests_folder_path() + 'unit_tests/use_cases/test_projects/correct_project'
+        expected_project_full_path = get_sample_correct_test_project_path()
 
         infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
         use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])

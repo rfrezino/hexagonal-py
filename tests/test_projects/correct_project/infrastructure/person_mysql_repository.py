@@ -1,6 +1,6 @@
 from abc import abstractclassmethod
-from tests.unit_tests.use_cases.test_projects.wrong_project.domain.person import Person
-from tests.unit_tests.use_cases.test_projects.wrong_project.services.person_repository import PersonRepository
+from tests.test_projects.correct_project.domain.person import Person
+from tests.test_projects.correct_project.services.person_repository import PersonRepository
 
 
 class PersonMySqlRepository(PersonRepository):
