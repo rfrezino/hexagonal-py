@@ -34,7 +34,7 @@ def diagram(source_path, hexagonal_config_file):
 @click.command()
 @click.option('--source_path', help='Where main source folder is located.', required=True)
 @click.option('--hexagonal_config_file', default='hexagonal_config.py', help="Hexagonal configuration file's name.")
-def run_check(source_path, hexagonal_config_file):
+def check(source_path, hexagonal_config_file):
     _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
 
     try:
@@ -91,7 +91,7 @@ def _process_cli_arguments(source_path: str, hexagonal_config_file: str):
     _import_hexagonal_config_file(hexagonal_config_file=hexagonal_config_file)
 
 
-cli.add_command(run_check)
+cli.add_command(check)
 cli.add_command(diagram)
 
 
