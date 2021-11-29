@@ -27,6 +27,8 @@ jobs:
           python -m pip install poetry
           poetry install
       - name: Run Tests
+        run: poetry run mypy src
+      - name: Run Tests
         run: poetry run nosetests -v ./
 
 
