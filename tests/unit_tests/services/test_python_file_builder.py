@@ -28,4 +28,4 @@ class TestPythonFileBuilder(TestCase):
         self.assertEqual(python_file.relative_path_from_source_module, 'use_cases/add_usecase.py',
                          'Wrong relative path')
         self.assertEqual(python_file.layer_name, 'use_cases', 'Wrong layer name')
-        self.assertEqual(python_file.layer_index, 0, 'Wrong layer number')
+        self.assertEqual(python_file.layer_index, 1, 'Wrong layer number')
