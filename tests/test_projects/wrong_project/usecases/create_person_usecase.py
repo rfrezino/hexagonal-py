@@ -3,6 +3,7 @@ from tests.test_projects.wrong_project.infrastructure.person_mysql_repository im
 
 
 class CreatePersonUseCase():
+    # Here is the error, I'm point to an outer layer, from usecases to infrastructure
     def execute(self, person_name: str, person_repository: PersonMySqlRepository):
         person = Person()
         person.name = person_name

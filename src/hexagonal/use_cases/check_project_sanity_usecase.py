@@ -39,6 +39,9 @@ class CheckProjectSanityUseCase:
     @staticmethod
     def _check_dependencies_order(python_file: PythonFile) -> Optional[HexagonalError]:
         for imported_module in python_file.imported_modules:
+            if python_file.layer_index is None or imported_module.layer_index is None:
+                continue
+
             if python_file.layer_index > imported_module.layer_index:
                 return HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
                                       outer_layer_name=imported_module.layer_name,

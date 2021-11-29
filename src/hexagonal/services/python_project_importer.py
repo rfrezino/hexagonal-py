@@ -25,7 +25,7 @@ class PythonProjectImporter:
         return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
                 for y in glob(os.path.join(x[0], '*.py'))]
 
-    def _import_python_file(self, file: str) -> Optional[PythonFile]:
+    def _import_python_file(self, file: str) -> PythonFile:
         logging.info(f'Importing {file}')
         python_file_builder = PythonFileBuilder()
         return python_file_builder.build(project_full_path=self._source_folder_full_path,
@@ -33,16 +33,17 @@ class PythonProjectImporter:
                                          composition=self._composition)
 
     def _import_python_files(self) -> List[PythonFile]:
-        valid_files = []
+        valid_files: List[PythonFile] = []
         python_source_files = self._get_python_files_in_source_folder()
 
         for python_file in python_source_files:
-            python_file = self._import_python_file(python_file)
-            if python_file.layer_index is None:
-                logging.warning(f'File layer index is invalid: {python_file.full_path}')
+            imported_python_file = self._import_python_file(python_file)
+            if imported_python_file.layer_index is None:
+                logging.warning(f'File layer index is invalid: {imported_python_file.full_path}')
                 continue
 
-            valid_files.append(python_file)
+            valid_files.append(imported_python_file)
 
-        valid_files.sort(key=lambda valid_file: valid_file.layer_index, reverse=True)
+        valid_files.sort(key=lambda valid_file: 0 if valid_file.layer_index is None else valid_file.layer_index,
+                         reverse=True)
         return valid_files

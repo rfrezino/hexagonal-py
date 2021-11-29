@@ -1,6 +1,6 @@
 import os.path
-from modulefinder import ModuleFinder
-from typing import List
+from modulefinder import ModuleFinder, Module
+from typing import List, Optional
 
 from hexagonal.domain.python_file import PythonFile
 from hexagonal.domain.python_module import PythonModule
@@ -57,18 +57,30 @@ class PythonFileBuilder:
 
         return result
 
+    def __get_module_file_name(self, module: Module) -> Optional[str]:
+        string_representation = str(module).strip()
+        if not string_representation:
+            return None
+
+        try:
+            return str(module).split("'")[3]
+        except IndexError:
+            return None
+        except Exception:
+            return None
+
     def _get_all_modules_source_paths(self, file_full_path: str) -> List[str]:
         finder = ModuleFinder(path=[self._project_full_path])
         finder.run_script(file_full_path)
 
         all_modules = []
         for module in finder.modules.values():
-            all_modules.append(module.__file__)
+            all_modules.append(self.__get_module_file_name(module))
 
         all_modules.extend(self._convert_bad_modules_into_paths(base_file_full_path=file_full_path,
                                                                 bad_modules=list(finder.badmodules.keys())))
 
-        return list(filter(lambda value: value is not None, all_modules))
+        return [value for value in all_modules if value is not None]
 
     def _get_modules_imported_in_python_file(self, *, file_full_path: str) -> List[PythonModule]:
         if not os.path.exists(file_full_path):
@@ -87,7 +99,8 @@ class PythonFileBuilder:
             if hexagonal_module.layer_index is not None:
                 valid_modules.append(hexagonal_module)
 
-        valid_modules.sort(key=lambda valid_module: valid_module.layer_index, reverse=True)
+        valid_modules.sort(key=lambda valid_module: 0 if not valid_module.layer_index else valid_module.layer_index,
+                           reverse=True)
         return valid_modules
 
     def _set_layer_information(self, hexagonal_module, imported_source):

@@ -41,6 +41,7 @@ def check(source_path, hexagonal_config_file):
         checker = CheckProjectSanityUseCase()
         response = checker.check(composition=hexagonal_config, source_folder=source_path)
     except Exception as error:
+        logging.error('Error while processing project', exc_info=error)
         click.echo(f'Error while processing project: "{error}"')
         exit(1)
 
