@@ -1,7 +1,7 @@
 import logging
 import os
 from glob import glob
-from typing import List, Optional
+from typing import List
 
 from hexagonal.domain.python_file import PythonFile
 from hexagonal.domain.python_project import PythonProject
@@ -13,9 +13,26 @@ class PythonProjectImporter:
     _composition: HexagonalComposition
     _source_folder_full_path: str
 
-    def import_project(self, *, source_folder: str, composition: HexagonalComposition) -> PythonProject:
-        self._composition = composition
-        self._source_folder_full_path = os.path.abspath(source_folder)
+    @property
+    def source_folder_full_path(self):
+        return self._source_folder_full_path
+
+    def __init__(self, source_folder_full_path: str, hexagonal_composition: HexagonalComposition):
+        if not source_folder_full_path.startswith('/'):
+            raise Exception("The param source_folder_full_path must have the source's folder full path.")
+
+        if not os.path.isdir(source_folder_full_path):
+            raise Exception('Source folder not found.')
+
+        self._source_folder_full_path = source_folder_full_path
+        self._composition = hexagonal_composition
+
+    def _get_all_python_files_paths_from_source_folder(self) -> List[str]:
+        return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
+                for y in glob(os.path.join(x[0], '*.py'))]
+
+    def import_project(self) -> PythonProject:
+        raw_project_files = self._get_all_python_files_paths_from_source_folder()
 
         python_files = self._import_python_files()
 

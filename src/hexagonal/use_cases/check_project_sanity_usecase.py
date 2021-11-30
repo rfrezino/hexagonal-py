@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -21,8 +22,10 @@ class CheckProjectSanityUseCase:
     _composition: HexagonalComposition
 
     def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> HexagonalCheckResponse:
-        importer = PythonProjectImporter()
-        python_project = importer.import_project(source_folder=source_folder, composition=composition)
+        source_folder = os.path.abspath(source_folder)
+
+        importer = PythonProjectImporter(source_folder_full_path=source_folder, hexagonal_composition=composition)
+        python_project = importer.import_project()
 
         errors = []
         for python_file in python_project.python_files:
