@@ -97,7 +97,7 @@ cli.add_command(diagram)
 
 
 def main():
-    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout, level=logging.ERROR)
+    logging.basicConfig(format='%(asctime)s %(levelname)s: %(message)s', stream=sys.stdout, level=logging.WARNING)
     cli()
 
 

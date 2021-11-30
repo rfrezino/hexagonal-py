@@ -7,8 +7,6 @@ from tests.utils import get_sample_wrong_test_project_path, get_sample_correct_t
 
 
 class HexagonalSanityCheckUnitTest(TestCase):
-    # def test_check_when_project_is_correct_all_file_were_checked(self):
-
 
     def test_check_when_project_has_wrong_dependencies_import_return_errors(self):
         expected_project_full_path = get_sample_wrong_test_project_path()
