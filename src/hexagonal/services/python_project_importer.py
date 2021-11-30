@@ -27,16 +27,29 @@ class PythonProjectImporter:
         self._source_folder_full_path = source_folder_full_path
         self._composition = hexagonal_composition
 
-    def _get_all_python_files_paths_from_source_folder(self) -> List[str]:
-        return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
-                for y in glob(os.path.join(x[0], '*.py'))]
-
     def import_project(self) -> PythonProject:
-        raw_project_files = self._get_all_python_files_paths_from_source_folder()
+        project_files_paths = self._get_all_python_files_paths_from_source_folder()
+        python_project_files = self._convert_files_paths_in_python_project_files(python_files_paths=project_files_paths)
 
         python_files = self._import_python_files()
 
         return PythonProject(full_path=self._source_folder_full_path, python_files=python_files)
+
+    def _get_all_python_files_paths_from_source_folder(self) -> List[str]:
+        return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
+                for y in glob(os.path.join(x[0], '*.py'))]
+
+    def _convert_files_paths_in_python_project_files(self, python_files_paths: List[str]) -> List[PythonFile]:
+        result = []
+        for python_files_path in python_files_paths:
+            result += self._convert_file_path_in_python_project_file(python_file_path=python_files_path)
+
+        return result
+
+    def _convert_file_path_in_python_project_file(self, python_file_path: str) -> PythonFile:
+        builder = PythonFileBuilder(file_full_path=python_file_path)
+        return builder.build()
+
 
     def _get_python_files_in_source_folder(self) -> List[str]:
         return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)

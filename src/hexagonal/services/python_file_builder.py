@@ -12,6 +12,24 @@ class PythonFileBuilder:
     _onion_modules_dirs_names: List[str]
     _used_local_modules: List[str]
     _project_full_path: str
+    # new
+    _file_full_path: str
+
+    @property
+    def file_full_path(self) -> str:
+        return self._file_full_path
+
+    def __init__(self, file_full_path: str):
+        if not file_full_path.startswith('/'):
+            raise Exception("The param file_full_path must have the file's full path.")
+
+        if not os.path.isfile(file_full_path):
+            raise Exception('Source file not found.')
+
+        if not file_full_path.endswith('.py'):
+            raise Exception('File must have .py extension.')
+
+        self._file_full_path = file_full_path
 
     def build(self, *, project_full_path: str, file_full_path: str, composition: HexagonalComposition) -> PythonFile:
         self._composition = composition

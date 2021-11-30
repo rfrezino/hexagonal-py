@@ -1,3 +1,4 @@
+import os
 from unittest import TestCase
 
 from hexagonal.domain.hexagonal_layer import HexagonalLayer
@@ -6,6 +7,30 @@ from hexagonal.services.python_file_builder import PythonFileBuilder
 
 
 class TestPythonFileBuilder(TestCase):
+
+    def test_init_should_raise_exception_when_param_file_full_path_is_relative_path(self):
+        invalid_source_path = '~/test.py'
+
+        with self.assertRaises(Exception) as error:
+            builder = PythonFileBuilder(file_full_path=invalid_source_path)
+        self.assertEqual("The param source_folder_full_path must have the source's folder full path.",
+                         str(error.exception))
+
+    def test_init_should_raise_exception_when_param_file_full_path_does_not_exits(self):
+        invalid_source_path = '/nonexist.py'
+
+        with self.assertRaises(Exception) as error:
+            builder = PythonFileBuilder(file_full_path=invalid_source_path)
+
+        self.assertEqual('Source folder not found.', str(error.exception))
+
+    def test_init_should_return_valid_object_when_params_are_correct(self):
+        valid_source_path = os.path.abspath(__file__)
+
+        builder = PythonFileBuilder(file_full_path=valid_source_path)
+
+        self.assertEqual(valid_source_path, builder.file_full_path)
+
     def test_build_when_params_correct_return_valid_object(self):
         # Setup
         layer_use_case = HexagonalLayer('Use cases', ['use_cases'])
