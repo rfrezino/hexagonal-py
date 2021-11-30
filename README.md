@@ -16,7 +16,7 @@ The tool expects a default file name on your source folder dir with the name `he
 There are two arguments: 
    - `name`: It can be any name, `domain`, `frontend`, `infrastructure`, or any name you used for your layers.
    - `usecases`: This is the name of the directory the files related to this layer as storage. It's not the full path, 
-just the directory name.
+it's the directory name relative path from source.
 
 2. Import `hexagonal_config` on your file, and define the order with `+` (add layers)
 then `>>`(set the sequence of the layers). The most to the left layers is the most outer layer, while
