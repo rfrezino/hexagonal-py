@@ -20,7 +20,7 @@ class PythonFileBuilder:
         relative_path_from_source_module = file_full_path.replace(project_full_path + '/', '')
         self._used_local_modules = self._get_python_project_local_modules(relative_path_from_source_module)
 
-        layer_name = relative_path_from_source_module.split('/')[0]
+        layer_name = relative_path_from_source_module.rsplit('/', 1)[0]
         layer_index = composition.get_layer_index_by_module_name(layer_name)
         python_modules = self._get_modules_imported_in_python_file(file_full_path=file_full_path)
 
