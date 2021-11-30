@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexagonal-sanity-check"
-version = "0.0.17"
+version = "0.0.18"
 description = """Hexagonal Sanity Check"""
 readme = 'README.md'
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
