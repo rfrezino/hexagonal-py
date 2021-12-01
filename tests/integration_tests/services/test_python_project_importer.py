@@ -25,7 +25,7 @@ class TestPythonProjectImporter(TestCase):
         self.assertEqual('Source folder not found.', str(error.exception))
 
     def test_init_should_return_valid_object_when_params_are_correct(self):
-        valid_source_path = os.path.abspath('./')
+        valid_source_path = os.path.abspath('/')
 
         importer = PythonProjectImporter(source_folder_full_path=valid_source_path,
                                          hexagonal_composition=HexagonalComposition())

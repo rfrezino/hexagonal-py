@@ -3,7 +3,7 @@ from unittest import TestCase
 from hexagonal.domain.hexagonal_layer import HexagonalLayer
 from hexagonal.services.hexagonal_composition import HexagonalComposition
 from hexagonal.use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
-from tests.utils import get_sample_wrong_test_project_path, get_sample_correct_test_project_path
+from tests.integration_tests.utils.utils import get_sample_wrong_test_project_path, get_sample_correct_test_project_path
 
 
 class HexagonalSanityCheckUnitTest(TestCase):
@@ -32,7 +32,7 @@ class HexagonalSanityCheckUnitTest(TestCase):
         self.assertEqual(response.errors[0].inner_layer_name, 'usecases')
         self.assertEqual(response.errors[0].python_file_problem, 'usecases/create_person_usecase.py')
         self.assertTrue(response.errors[0].imported_module_problem.endswith(
-            'test_projects/wrong_project/infrastructure/person_mysql_repository.py'))
+            'sample_projects/wrong_project/infrastructure/person_mysql_repository.py'))
 
     def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
         expected_project_full_path = get_sample_correct_test_project_path()

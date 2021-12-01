@@ -14,10 +14,20 @@ class PythonFileBuilder:
     _project_full_path: str
     # new
     _file_full_path: str
+    _file_name: str
+    _file_folder: str
 
     @property
     def file_full_path(self) -> str:
         return self._file_full_path
+
+    @property
+    def file_name(self) -> str:
+        return self._file_name
+
+    @property
+    def file_folder(self) -> str:
+        return self._file_folder
 
     def __init__(self, file_full_path: str):
         if not file_full_path.startswith('/'):
@@ -30,19 +40,27 @@ class PythonFileBuilder:
             raise Exception('File must have .py extension.')
 
         self._file_full_path = file_full_path
+        self._file_name = self._get_file_name_from_full_file_path()
+        self._file_folder = self._get_file_folder_path()
 
-    def build(self, *, project_full_path: str, file_full_path: str, composition: HexagonalComposition) -> PythonFile:
+    def _get_file_name_from_full_file_path(self) -> str:
+        return self._file_full_path.split('/')[-1]
+
+    def _get_file_folder_path(self) -> str:
+        return os.path.abspath(self.file_full_path.replace(self.file_name, ''))
+
+    def build(self, *, project_full_path: str, composition: HexagonalComposition) -> PythonFile:
         self._composition = composition
         self._project_full_path = project_full_path
 
-        relative_path_from_source_module = file_full_path.replace(project_full_path + '/', '')
+        relative_path_from_source_module = self._file_full_path.replace(project_full_path + '/', '')
         self._used_local_modules = self._get_python_project_local_modules(relative_path_from_source_module)
 
         layer_name = relative_path_from_source_module.rsplit('/', 1)[0]
         layer_index = composition.get_layer_index_by_module_name(layer_name)
-        python_modules = self._get_modules_imported_in_python_file(file_full_path=file_full_path)
+        python_modules = self._get_modules_imported_in_python_file(file_full_path=self._file_full_path)
 
-        return PythonFile(full_path=file_full_path,
+        return PythonFile(full_path=self._file_full_path,
                           relative_path_from_source_module=relative_path_from_source_module,
                           layer_name=layer_name,
                           layer_index=layer_index,

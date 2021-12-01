@@ -3,7 +3,8 @@ from unittest import TestCase
 from click.testing import CliRunner
 
 from hexagonal.infrastructure.cli import check
-from tests.utils import get_project_path, get_sample_correct_test_project_path, get_sample_wrong_test_project_path
+from tests.integration_tests.utils.utils import get_sample_correct_test_project_path, get_sample_wrong_test_project_path
+from tests.utils import get_project_path
 
 
 class TestCli(TestCase):

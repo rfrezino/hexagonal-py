@@ -28,8 +28,8 @@ class PythonProjectImporter:
         self._composition = hexagonal_composition
 
     def import_project(self) -> PythonProject:
-        project_files_paths = self._get_all_python_files_paths_from_source_folder()
-        python_project_files = self._convert_files_paths_in_python_project_files(python_files_paths=project_files_paths)
+        # project_files_paths = self._get_all_python_files_paths_from_source_folder()
+        # python_project_files = self._convert_files_paths_in_python_project_files(python_files_paths=project_files_paths)
 
         python_files = self._import_python_files()
 
@@ -50,16 +50,14 @@ class PythonProjectImporter:
         builder = PythonFileBuilder(file_full_path=python_file_path)
         return builder.build()
 
-
     def _get_python_files_in_source_folder(self) -> List[str]:
         return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
                 for y in glob(os.path.join(x[0], '*.py'))]
 
     def _import_python_file(self, file: str) -> PythonFile:
         logging.info(f'Importing {file}')
-        python_file_builder = PythonFileBuilder()
+        python_file_builder = PythonFileBuilder(file_full_path=file)
         return python_file_builder.build(project_full_path=self._source_folder_full_path,
-                                         file_full_path=file,
                                          composition=self._composition)
 
     def _import_python_files(self) -> List[PythonFile]:
