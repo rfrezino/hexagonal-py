@@ -1,9 +1,8 @@
 from dataclasses import dataclass
-from typing import List
 
 
 @dataclass
-class PythonFile:
+class RawPythonFile:
     file_full_path: str
     file_name: str
     file_folder_full_path: str
@@ -12,4 +11,4 @@ class PythonFile:
     # the project_relative_folder_path is "services/another"
     relative_folder_path_from_project_folder: str
     project_folder_full_path: str
-    imported_modules: List[str]
+

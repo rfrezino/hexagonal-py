@@ -1,9 +1,27 @@
+from typing import List
+
 from hexagonal.domain.hexagonal_layer import HexagonalLayer
-from hexagonal.main import hexagonal_config
+from hexagonal.services.hexagonal_composition import HexagonalComposition
 
-infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
-use_cases_layer = HexagonalLayer(name='use_cases', directories=['use_cases'])
-services_layer = HexagonalLayer(name='services', directories=['services'])
-domain_layer = HexagonalLayer(name='domain', directories=['domain'])
 
-hexagonal_config + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer
+class HexagonalConfig:
+    excluded_dirs: List[str]
+    _layers: HexagonalComposition
+
+    def __init__(self):
+        self._layers = HexagonalComposition()
+        self.excluded_dirs = []
+
+    def add_inner_layer(self, layer: HexagonalLayer) -> 'HexagonalConfig':
+        self._layers.append(layer)
+        return self
+
+    def clear_layers(self):
+        self._layers.clear()
+
+    @property
+    def layers(self) -> HexagonalComposition:
+        return self._layers
+
+
+hexagonal_config = HexagonalConfig()

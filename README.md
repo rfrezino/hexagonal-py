@@ -43,9 +43,10 @@ Example, for this folder structure:
     └── create_person_usecase.py
 ```
 The file:
+
 ```python
 from hexagonal.domain.hexagonal_layer import HexagonalLayer
-from hexagonal.main import hexagonal_config
+from hexagonal.hexagonal_config import hexagonal_config
 
 infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
 use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])

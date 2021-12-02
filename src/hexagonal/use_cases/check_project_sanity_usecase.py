@@ -1,52 +1,73 @@
-from dataclasses import dataclass
-from typing import List, Optional
+import os
+from typing import List
 
-from hexagonal.domain.hexagonal_check_response import HexagonalCheckResponse
 from hexagonal.domain.hexagonal_error import HexagonalError
+from hexagonal.domain.hexagonal_project.hexagonal_project import HexagonalProject
 from hexagonal.domain.python_file import PythonFile
-from hexagonal.services.hexagonal_composition import HexagonalComposition
-from hexagonal.services.python_project_importer import PythonProjectImporter
+from hexagonal.domain.raw_python_file import RawPythonFile
+from hexagonal.hexagonal_config import HexagonalConfig
+from hexagonal.services.hexagonal_dependency_flow_checker import HexagonalDependencyFlowChecker, DependencyFlowError
+from hexagonal.services.hexagonal_project_builder import HexagonalProjectBuilder
+from hexagonal.services.python_file_builder import PythonFileBuilder
+from hexagonal.services.raw_python_project_importer import RawPythonFilesImporter
 
 
-@dataclass
-class SanityCheckResponse:
-    FilesChecked: List[PythonFile]
-    HexagonalErrors: List[HexagonalError]
+class HexagonalCheckResponse:
+    errors: List[HexagonalError]
+    python_files: List[PythonFile]
+    hexagonal_project: HexagonalProject
 
 
 class CheckProjectSanityUseCase:
-    _hexa_modules_dirs_names = List[str]
     _source_folder_full_path: str
     _source_folder: str
-    _composition: HexagonalComposition
+    _hexagonal_config: HexagonalConfig
 
-    def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> HexagonalCheckResponse:
-        importer = PythonProjectImporter()
-        python_project = importer.import_project(source_folder=source_folder, composition=composition)
+    def __init__(self, *, hexagonal_config: HexagonalConfig, source_folder: str = ''):
+        self._source_folder = os.path.abspath(source_folder)
+        self._hexagonal_config = hexagonal_config
 
-        errors = []
-        for python_file in python_project.python_files:
-            error = self._check_dependencies_order(python_file=python_file)
-            if error:
-                errors.append(error)
+    def check(self) -> HexagonalCheckResponse:
+        python_files = self._get_python_files_from_project()
+        hexagonal_project_builder = HexagonalProjectBuilder(
+            python_files=python_files,
+            hexagonal_composition=self._hexagonal_config.layers)
+        hexagonal_project = hexagonal_project_builder.build()
+
+        flow_checker = HexagonalDependencyFlowChecker(hexagonal_project=hexagonal_project)
+        flow_checker_response = flow_checker.check()
 
         result = HexagonalCheckResponse()
-        result.errors = errors
-        result.project = python_project
+        result.errors = self._convert_flow_errors(flow_checker_response.errors)
+        result.python_files = python_files
+        result.hexagonal_project = hexagonal_project
+        return result
+
+    def _get_python_files_from_project(self) -> List[PythonFile]:
+        importer = RawPythonFilesImporter(source_folder_full_path=self._source_folder,
+                                          hexagonal_composition=self._hexagonal_config.layers,
+                                          excluded_folders=self._hexagonal_config.excluded_dirs)
+        raw_python_files = importer.import_raw_python_files()
+        return self._convert_raw_python_files_into_python_files(raw_python_files=raw_python_files)
+
+    @staticmethod
+    def _convert_raw_python_files_into_python_files(raw_python_files: List[RawPythonFile]) -> List[PythonFile]:
+        result = []
+        python_file_builder = PythonFileBuilder()
+        for raw_python_file in raw_python_files:
+            result.append(python_file_builder.build(raw_python_file=raw_python_file))
 
         return result
 
     @staticmethod
-    def _check_dependencies_order(python_file: PythonFile) -> Optional[HexagonalError]:
-        for imported_module in python_file.imported_modules:
-            if python_file.layer_index is None or imported_module.layer_index is None:
-                continue
+    def _convert_flow_errors(errors: List[DependencyFlowError]) -> List[HexagonalError]:
+        result = []
+        for error in errors:
+            new_error = HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
+                                       outer_layer_name=error.imported_module_layer.name,
+                                       inner_layer_name=error.source_file_layer.name,
+                                       python_file_problem=error.source_file.file_full_path,
+                                       imported_module_problem=error.imported_module.file_full_path)
+            result.append(new_error)
 
-            if python_file.layer_index > imported_module.layer_index:
-                return HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
-                                      outer_layer_name=imported_module.layer_name,
-                                      inner_layer_name=python_file.layer_name,
-                                      python_file_problem=python_file.relative_path_from_source_module,
-                                      imported_module_problem=imported_module.module)
-
-        return None
+        return result
