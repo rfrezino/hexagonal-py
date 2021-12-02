@@ -11,18 +11,23 @@ class TestCli(TestCase):
     def test_cli_bootstrap_should_return_true(self):
         # This tests check the consistency of this on project
         runner = CliRunner()
-        result = runner.invoke(check, ['--source_path', get_project_path() + '/src/hexagonal'])
+        result = runner.invoke(check, ['--source_path', get_project_path() + '/src/hexagonal',
+                                       '--hexagonal_config_file', 'sanity_check_hexagonal_config.py'])
 
+        expected_msg = 'Hexagonal Architecture: Checked a project with 4 hexagonal layers, ' \
+                       'with 25 python files and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
-        self.assertIn('Hexagonal Architecture: 25 and 0 errors found.', result.output)
+        self.assertIn(expected_msg, result.output)
 
     def test_cli_run_check_should_return_no_errors_for_correct_project(self):
         # This tests check the consistency of this on project
         runner = CliRunner()
         result = runner.invoke(check, ['--source_path', get_sample_correct_test_project_path()])
 
+        expected_msg = 'Hexagonal Architecture: Checked a project with 4 hexagonal layers, ' \
+                       'with 11 python files and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
-        self.assertIn('Hexagonal Architecture: 11 and 0 errors found.', result.output)
+        self.assertIn(expected_msg, result.output)
 
     def test_cli_run_check_should_return_errors_for_wrong_project(self):
         # This tests check the consistency of this on project

@@ -35,6 +35,11 @@ def diagram(source_path, hexagonal_config_file):
 @click.option('--source_path', help='Where main source folder is located.', required=True)
 @click.option('--hexagonal_config_file', default='hexagonal_config.py', help="Hexagonal configuration file's name.")
 def check(source_path, hexagonal_config_file):
+    def _build_response_message() -> str:
+        return f'Hexagonal Architecture: Checked a project with {len(response.hexagonal_project.layers)} ' \
+               f'hexagonal layers, with {len(response.python_files)} python files ' \
+               f'and found {len(response.errors)} errors.'
+
     try:
         _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
 
@@ -48,10 +53,10 @@ def check(source_path, hexagonal_config_file):
 
     [_print_error(index, error) for index, error in enumerate(response.errors)]
     if len(response.errors) > 0:
-        logging.error(f'Hexagonal Architecture: {len(response.python_files)} and {len(response.errors)} errors found.')
+        logging.error(_build_response_message())
         exit(1)
 
-    click.echo(f'Hexagonal Architecture: {len(response.python_files)} and 0 errors found.')
+    click.echo(_build_response_message())
 
 
 def _print_check_response(response: HexagonalCheckResponse):
