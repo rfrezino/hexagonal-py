@@ -22,7 +22,7 @@ class TestHexagonalProjectBuilder(TestCase):
                        ),
             PythonFile(full_path='/usr/src/project/use_case/create_person.py',
                        file_name='create_person.py',
-                       file_folder_full_path='/usr/src/project/use_case/',
+                       file_folder_full_path='/usr/src/project/use_case',
                        relative_folder_path_from_project_folder='/use_case',
                        project_folder_full_path='/usr/src/project',
                        imported_modules=[]
@@ -49,9 +49,35 @@ class TestHexagonalProjectBuilder(TestCase):
                                       directories=['/use_case'], python_files=[])],
             files_not_in_layers=[])
 
+        expected_result = HexagonalProject(
+            project_path='/usr/src/project', layers=[
+                HexagonalProjectLayer(
+                    index=1,
+                    name='Domain Entities',
+                    directories=['/domain/entities'],
+                    python_files=[
+                        PythonFile(full_path='/usr/src/project/domain/entities/person.py',
+                                   file_name='person.py',
+                                   file_folder_full_path='/usr/src/project/domain/entities/',
+                                   relative_folder_path_from_project_folder='/domain/entities',
+                                   project_folder_full_path='/usr/src/project',
+                                   imported_modules=[])]),
+                HexagonalProjectLayer(
+                    index=2,
+                    name='Use Cases',
+                    directories=['/use_case'],
+                    python_files=[
+                        PythonFile(full_path='/usr/src/project/use_case/create_person.py',
+                                   file_name='create_person.py',
+                                   file_folder_full_path='/usr/src/project/use_case',
+                                   relative_folder_path_from_project_folder='/use_case',
+                                   project_folder_full_path='/usr/src/project',
+                                   imported_modules=[])])],
+            files_not_in_layers=[])
+
         # Execute
         builder = HexagonalProjectBuilder(python_files=python_files, hexagonal_composition=hexagonal_composition)
         response_project = builder.build()
 
         # Assert
-        self.assertEqual('', response_project)
+        self.assertEqual(expected_result, response_project)
