@@ -5,13 +5,15 @@ from typing import List, Optional
 from hexagonal.domain.hexagonal_check_response import HexagonalCheckResponse
 from hexagonal.domain.hexagonal_error import HexagonalError
 from hexagonal.domain.python_file import PythonFile
+from hexagonal.domain.raw_python_file import RawPythonFile
 from hexagonal.services.hexagonal_composition import HexagonalComposition
-from hexagonal.services.python_project_importer import PythonProjectImporter
+from hexagonal.services.python_file_builder import PythonFileBuilder
+from hexagonal.services.raw_python_project_importer import RawPythonFilesImporter
 
 
 @dataclass
 class SanityCheckResponse:
-    FilesChecked: List[PythonFile]
+    FilesChecked: List[RawPythonFile]
     HexagonalErrors: List[HexagonalError]
 
 
@@ -21,21 +23,36 @@ class CheckProjectSanityUseCase:
     _source_folder: str
     _composition: HexagonalComposition
 
-    def check(self, *, composition: HexagonalComposition, source_folder: str = '') -> HexagonalCheckResponse:
-        source_folder = os.path.abspath(source_folder)
+    def __init__(self, composition: HexagonalComposition, source_folder: str = ''):
+        self._source_folder = os.path.abspath(source_folder)
+        self._composition = composition
 
-        importer = PythonProjectImporter(source_folder_full_path=source_folder, hexagonal_composition=composition)
-        python_project = importer.import_project()
+    def check(self) -> HexagonalCheckResponse:
+        python_files = self._get_python_files_from_project()
 
         errors = []
-        for python_file in python_project.python_files:
+        for python_file in python_files:
             error = self._check_dependencies_order(python_file=python_file)
             if error:
                 errors.append(error)
 
         result = HexagonalCheckResponse()
         result.errors = errors
-        result.project = python_project
+        result.python_files = python_files
+        return result
+
+    def _get_python_files_from_project(self) -> List[PythonFile]:
+        importer = RawPythonFilesImporter(source_folder_full_path=self._source_folder,
+                                          hexagonal_composition=self._composition)
+        raw_python_files = importer.import_raw_python_files()
+        return self._convert_raw_python_files_into_python_files(raw_python_files=raw_python_files)
+
+    @staticmethod
+    def _convert_raw_python_files_into_python_files(raw_python_files: List[RawPythonFile]) -> List[PythonFile]:
+        result = []
+        python_file_builder = PythonFileBuilder()
+        for raw_python_file in raw_python_files:
+            result.append(python_file_builder.build(raw_python_file=raw_python_file))
 
         return result
 
