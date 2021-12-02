@@ -41,6 +41,7 @@ Example, for this folder structure:
 └── usecases
     ├── __init__.py
     └── create_person_usecase.py
+.tests    
 ```
 The file:
 
@@ -48,12 +49,12 @@ The file:
 from hexagonal.domain.hexagonal_layer import HexagonalLayer
 from hexagonal.hexagonal_config import hexagonal_config
 
-infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['infrastructure'])
-use_cases_layer = HexagonalLayer(name='use_cases', directories=['usecases'])
-services_layer = HexagonalLayer(name='services', directories=['services'])
-domain_layer = HexagonalLayer(name='domain', directories=['domain'])
+hexagonal_config.add_inner_layer(HexagonalLayer(name='infrastructure', directories=['/infrastructure']))
+hexagonal_config.add_inner_layer(HexagonalLayer(name='use_cases', directories=['/use_cases']))
+hexagonal_config.add_inner_layer(HexagonalLayer(name='services', directories=['/services']))
+hexagonal_config.add_inner_layer(HexagonalLayer(name='domain', directories=['/domain']))
 
-hexagonal_config + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer
+hexagonal_config.excluded_dirs = ['/tests']
 ```
 
 
