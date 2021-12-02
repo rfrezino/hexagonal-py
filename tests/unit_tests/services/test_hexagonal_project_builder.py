@@ -41,15 +41,6 @@ class TestHexagonalProjectBuilder(TestCase):
         hexagonal_composition + use_cases >> entities
 
         expected_result = HexagonalProject(
-            project_path='/usr/src/project',
-            layers=[
-                HexagonalProjectLayer(index=1, name='Domain Entities',
-                                      directories=['/domain/entities'], python_files=[]),
-                HexagonalProjectLayer(index=2, name='Use Cases',
-                                      directories=['/use_case'], python_files=[])],
-            files_not_in_layers=[])
-
-        expected_result = HexagonalProject(
             project_path='/usr/src/project', layers=[
                 HexagonalProjectLayer(
                     index=1,
@@ -73,7 +64,11 @@ class TestHexagonalProjectBuilder(TestCase):
                                    relative_folder_path_from_project_folder='/use_case',
                                    project_folder_full_path='/usr/src/project',
                                    imported_modules=[])])],
-            files_not_in_layers=[])
+            files_not_in_layers=[
+                PythonFile(full_path='/usr/src/project/docs/out.py', file_name='out.py',
+                           file_folder_full_path='/usr/src/project/docs/',
+                           relative_folder_path_from_project_folder='/docs',
+                           project_folder_full_path='/usr/src/project', imported_modules=[])])
 
         # Execute
         builder = HexagonalProjectBuilder(python_files=python_files, hexagonal_composition=hexagonal_composition)

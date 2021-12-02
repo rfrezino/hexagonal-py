@@ -21,10 +21,11 @@ class HexagonalProjectBuilder:
         self._project_folder_full_path = self._extract_project_path()
         project_layers = self._generate_layers()
         self._add_files_to_corresponding_layers(project_layers=project_layers)
+        files_not_in_layers = self._get_files_without_layers(project_layers=project_layers)
 
         return HexagonalProject(project_path=self._project_folder_full_path,
                                 layers=project_layers,
-                                files_not_in_layers=[])
+                                files_not_in_layers=files_not_in_layers)
 
     def _extract_project_path(self) -> str:
         return self._python_files[0].project_folder_full_path
@@ -49,3 +50,17 @@ class HexagonalProjectBuilder:
                 if python_file.relative_folder_path_from_project_folder in layer.directories:
                     layer.python_files.append(python_file)
                     break
+
+    def _get_files_without_layers(self, project_layers: List[HexagonalProjectLayer]) -> List[PythonFile]:
+        result = []
+        for python_file in self._python_files:
+            file_add = False
+            for layer in project_layers:
+                if python_file.relative_folder_path_from_project_folder in layer.directories:
+                    file_add = True
+                    break
+
+            if not file_add:
+                result.append(python_file)
+
+        return result
