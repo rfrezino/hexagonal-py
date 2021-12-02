@@ -35,11 +35,10 @@ def diagram(source_path, hexagonal_config_file):
 @click.option('--source_path', help='Where main source folder is located.', required=True)
 @click.option('--hexagonal_config_file', default='hexagonal_config.py', help="Hexagonal configuration file's name.")
 def check(source_path, hexagonal_config_file):
-    _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
-
     try:
-        checker = CheckProjectSanityUseCase()
-        response = checker.check(composition=hexagonal_config, source_folder=source_path)
+        _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
+        checker = CheckProjectSanityUseCase(composition=hexagonal_config, source_folder=source_path)
+        response = checker.check()
     except Exception as error:
         logging.error('Error while processing project', exc_info=error)
         click.echo(f'Error while processing project: "{error}"')
