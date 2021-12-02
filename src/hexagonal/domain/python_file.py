@@ -13,6 +13,3 @@ class PythonFile:
     relative_folder_path_from_project_folder: str
     project_folder_full_path: str
     imported_modules: List[str]
-
-    def __repr__(self):
-        return f'PythonFile({self.file_full_path})'

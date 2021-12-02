@@ -2,6 +2,7 @@ import os
 from typing import List
 
 from hexagonal.domain.hexagonal_error import HexagonalError
+from hexagonal.domain.hexagonal_project.hexagonal_project import HexagonalProject
 from hexagonal.domain.python_file import PythonFile
 from hexagonal.domain.raw_python_file import RawPythonFile
 from hexagonal.services.hexagonal_composition import HexagonalComposition
@@ -14,6 +15,7 @@ from hexagonal.services.raw_python_project_importer import RawPythonFilesImporte
 class HexagonalCheckResponse:
     errors: List[HexagonalError]
     python_files: List[PythonFile]
+    hexagonal_project: HexagonalProject
 
 
 class CheckProjectSanityUseCase:
@@ -38,6 +40,7 @@ class CheckProjectSanityUseCase:
         result = HexagonalCheckResponse()
         result.errors = self._convert_flow_errors(flow_checker_response.errors)
         result.python_files = python_files
+        result.hexagonal_project = hexagonal_project
         return result
 
     def _get_python_files_from_project(self) -> List[PythonFile]:

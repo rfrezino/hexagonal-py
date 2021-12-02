@@ -47,7 +47,8 @@ class HexagonalProjectBuilder:
     def _add_files_to_corresponding_layers(self, project_layers: List[HexagonalProjectLayer]):
         for python_file in self._python_files:
             for layer in project_layers:
-                if python_file.relative_folder_path_from_project_folder in layer.directories:
+                relative_path = python_file.relative_folder_path_from_project_folder
+                if any(relative_path.startswith(layer_dir) for layer_dir in layer.directories):
                     layer.python_files.append(python_file)
                     break
 
@@ -56,7 +57,8 @@ class HexagonalProjectBuilder:
         for python_file in self._python_files:
             file_add = False
             for layer in project_layers:
-                if python_file.relative_folder_path_from_project_folder in layer.directories:
+                relative_path = python_file.relative_folder_path_from_project_folder
+                if any(relative_path.startswith(layer_dir) for layer_dir in layer.directories):
                     file_add = True
                     break
 

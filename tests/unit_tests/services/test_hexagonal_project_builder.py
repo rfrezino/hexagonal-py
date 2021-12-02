@@ -78,3 +78,29 @@ class TestHexagonalProjectBuilder(TestCase):
 
         # Assert
         self.assertEqual(expected_result, response_project)
+
+    def test_build_when_layers_has_nested_folder_and_are_valid_result_valid_response(self):
+        # Setup
+        invoice_py_file = PythonFile(file_full_path='/usr/src/invoicing/adapters/persistence/mysql/invoice.py',
+                                     file_name='invoice.py',
+                                     file_folder_full_path='/usr/src/invoicing/adapters/persistence/mysql',
+                                     relative_folder_path_from_project_folder='/adapters/persistence/mysql',
+                                     project_folder_full_path='/usr/src/invoicing', imported_modules=[])
+
+        hexagonal_composition = HexagonalComposition()
+        adapters = HexagonalLayer(name='Adapters', directories=['/adapters'])
+        hexagonal_composition + adapters
+
+        # Execute
+        builder = HexagonalProjectBuilder(python_files=[invoice_py_file], hexagonal_composition=hexagonal_composition)
+        response_project = builder.build()
+
+        # Assert
+        expected_result = HexagonalProject(
+            project_path='/usr/src/invoicing',
+            layers=[
+                HexagonalProjectLayer(index=1, name='Adapters', directories=['/adapters'],
+                                      python_files=[invoice_py_file])],
+            files_not_in_layers=[])
+
+        self.assertEqual(expected_result, response_project)
