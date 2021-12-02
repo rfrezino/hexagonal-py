@@ -14,7 +14,7 @@ class TestCli(TestCase):
         result = runner.invoke(check, ['--source_path', get_project_path() + '/src/hexagonal'])
 
         self.assertEqual(result.exit_code, 0)
-        self.assertIn('No errors found', result.output)
+        self.assertIn('Hexagonal Architecture: 25 and 0 errors found.', result.output)
 
     def test_cli_run_check_should_return_no_errors_for_correct_project(self):
         # This tests check the consistency of this on project
@@ -22,21 +22,12 @@ class TestCli(TestCase):
         result = runner.invoke(check, ['--source_path', get_sample_correct_test_project_path()])
 
         self.assertEqual(result.exit_code, 0)
-        self.assertIn('No errors found', result.output)
+        self.assertIn('Hexagonal Architecture: 11 and 0 errors found.', result.output)
 
     def test_cli_run_check_should_return_errors_for_wrong_project(self):
         # This tests check the consistency of this on project
         runner = CliRunner()
         result = runner.invoke(check, ['--source_path', get_sample_wrong_test_project_path()])
-
-        self.assertEqual(result.exit_code, 1)
-        self.assertIn('Wrong dependency flow. An inner layer is pointing to an outer layer.', result.output)
-
-
-    def test_cli_run_check_should_return_errors_for_wrong_project_test(self):
-        # This tests check the consistency of this on project
-        runner = CliRunner()
-        result = runner.invoke(check, ['--source_path', '/Users/rodrigo.rezino/Freshbooks/ideal-pancake/invoicing'])
 
         self.assertEqual(result.exit_code, 1)
         self.assertIn('Wrong dependency flow. An inner layer is pointing to an outer layer.', result.output)

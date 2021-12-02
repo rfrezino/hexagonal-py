@@ -1,4 +1,3 @@
-import logging
 import os
 from glob import glob
 from typing import List
@@ -71,29 +70,3 @@ class RawPythonFilesImporter:
         builder = RawPythonFileBuilder(file_full_path=python_file_path,
                                        project_source_folder_full_path=self._source_folder_full_path)
         return builder.build()
-
-    def _get_python_files_in_source_folder(self) -> List[str]:
-        return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
-                for y in glob(os.path.join(x[0], '*.py'))]
-
-    @staticmethod
-    def _import_python_file(file: str) -> RawPythonFile:
-        logging.info(f'Importing {file}')
-        python_file_builder = RawPythonFileBuilder(file_full_path=file)
-        return python_file_builder.build()
-
-    def _import_python_files(self) -> List[RawPythonFile]:
-        valid_files: List[RawPythonFile] = []
-        python_source_files = self._get_python_files_in_source_folder()
-
-        for python_file in python_source_files:
-            imported_python_file = self._import_python_file(python_file)
-            if imported_python_file.layer_index is None:
-                logging.warning(f'File layer index is invalid: {imported_python_file.file_full_path}')
-                continue
-
-            valid_files.append(imported_python_file)
-
-        valid_files.sort(key=lambda valid_file: 0 if valid_file.layer_index is None else valid_file.layer_index,
-                         reverse=True)
-        return valid_files

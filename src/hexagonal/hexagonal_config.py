@@ -14,6 +14,7 @@ class HexagonalConfig:
 
     def add_inner_layer(self, layer: HexagonalLayer) -> 'HexagonalConfig':
         self._layers.append(layer)
+        return self
 
     def clear_layers(self):
         self._layers.clear()
