@@ -43,9 +43,9 @@ class RawPythonFilesImporter:
 
         return result
 
-    @staticmethod
-    def _convert_file_path_in_python_project_file(python_file_path: str) -> RawPythonFile:
-        builder = RawPythonFileBuilder(file_full_path=python_file_path)
+    def _convert_file_path_in_python_project_file(self, python_file_path: str) -> RawPythonFile:
+        builder = RawPythonFileBuilder(file_full_path=python_file_path,
+                                       project_source_folder_full_path=self._source_folder_full_path)
         return builder.build()
 
     def _get_python_files_in_source_folder(self) -> List[str]:

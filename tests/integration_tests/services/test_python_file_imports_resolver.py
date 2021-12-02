@@ -17,7 +17,7 @@ class TestPythonFileImportsResolver(TestCase):
         file_path = project_path + '/usecases/create_person_usecase.py'
 
         raw_python_file = RawPythonFile(
-            full_path=file_path,
+            file_full_path=file_path,
             file_name='create_person_usecase.py',
             file_folder_full_path=project_path + '/usecases',
             relative_folder_path_from_project_folder='/usecases',

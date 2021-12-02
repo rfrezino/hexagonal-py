@@ -41,7 +41,7 @@ class RawPythonFileBuilder:
         self._file_name = self._get_file_name_from_full_file_path()
         self._file_folder = self._get_file_folder_path()
         return RawPythonFile(
-            full_path=self._file_full_path,
+            file_full_path=self._file_full_path,
             file_name=self._file_name,
             file_folder_full_path=self._file_folder,
             relative_folder_path_from_project_folder=self._get_relative_folder_path_from_project_folder(),
