@@ -31,3 +31,12 @@ class TestCli(TestCase):
 
         self.assertEqual(result.exit_code, 1)
         self.assertIn('Wrong dependency flow. An inner layer is pointing to an outer layer.', result.output)
+
+
+    def test_cli_run_check_should_return_errors_for_wrong_project_test(self):
+        # This tests check the consistency of this on project
+        runner = CliRunner()
+        result = runner.invoke(check, ['--source_path', '/Users/rodrigo.rezino/Freshbooks/ideal-pancake/invoicing'])
+
+        self.assertEqual(result.exit_code, 1)
+        self.assertIn('Wrong dependency flow. An inner layer is pointing to an outer layer.', result.output)

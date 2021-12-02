@@ -6,7 +6,7 @@ readme = 'README.md'
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
 packages = [{ include = "hexagonal", from = "src"}]
 keywords = ["hexagonal architecture", "onion architecture", "enforce rules"]
-exclude = ["src/hexagonal/hexagonal_config.py"]
+exclude = ["src/hexagonal/sanity_check_hexagonal_config.py"]
 
 [tool.poetry.dependencies]
 python = "^3.7"

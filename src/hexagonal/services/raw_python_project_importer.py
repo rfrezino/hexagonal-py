@@ -11,17 +11,24 @@ from hexagonal.services.raw_python_file_builder import RawPythonFileBuilder
 class RawPythonFilesImporter:
     _composition: HexagonalComposition
     _source_folder_full_path: str
+    _excluded_folders: List[str]
 
     @property
     def source_folder_full_path(self):
         return self._source_folder_full_path
 
-    def __init__(self, source_folder_full_path: str, hexagonal_composition: HexagonalComposition):
+    def __init__(self, source_folder_full_path: str, hexagonal_composition: HexagonalComposition,
+                 excluded_folders: List[str]):
         if not source_folder_full_path.startswith('/'):
             raise Exception("The param source_folder_full_path must have the source's folder full path.")
 
         if not os.path.isdir(source_folder_full_path):
             raise Exception('Source folder not found.')
+
+        if not excluded_folders:
+            self._excluded_folders = []
+        else:
+            self._excluded_folders = excluded_folders
 
         self._source_folder_full_path = source_folder_full_path
         self._composition = hexagonal_composition
@@ -33,8 +40,25 @@ class RawPythonFilesImporter:
         return python_project_files
 
     def _get_all_python_files_paths_from_source_folder(self) -> List[str]:
-        return [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
-                for y in glob(os.path.join(x[0], '*.py'))]
+        all_files = [os.path.abspath(y) for x in os.walk(self._source_folder_full_path)
+                     for y in glob(os.path.join(x[0], '*.py'))]
+        result = []
+        for file in all_files:
+            include_file = True
+
+            if '/.' in file:
+                continue
+
+            for excluded_dir in self._excluded_folders:
+                file_relative_path = file.replace(self._source_folder_full_path, '')
+                if file_relative_path.startswith(excluded_dir):
+                    include_file = False
+                    break
+
+            if include_file:
+                result.append(file)
+
+        return result
 
     def _convert_files_paths_in_python_project_files(self, python_files_paths: List[str]) -> List[RawPythonFile]:
         result = []

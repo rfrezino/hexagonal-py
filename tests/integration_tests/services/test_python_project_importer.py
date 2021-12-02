@@ -12,7 +12,8 @@ class TestPythonProjectImporter(TestCase):
 
         with self.assertRaises(Exception) as error:
             importer = RawPythonFilesImporter(source_folder_full_path=invalid_source_path,
-                                              hexagonal_composition=HexagonalComposition())
+                                              hexagonal_composition=HexagonalComposition(),
+                                              excluded_folders=[])
         self.assertEqual("The param source_folder_full_path must have the source's folder full path.",
                          str(error.exception))
 
@@ -21,7 +22,8 @@ class TestPythonProjectImporter(TestCase):
 
         with self.assertRaises(Exception) as error:
             importer = RawPythonFilesImporter(source_folder_full_path=invalid_source_path,
-                                              hexagonal_composition=HexagonalComposition())
+                                              hexagonal_composition=HexagonalComposition(),
+                                              excluded_folders=[])
 
         self.assertEqual('Source folder not found.', str(error.exception))
 
@@ -29,13 +31,15 @@ class TestPythonProjectImporter(TestCase):
         valid_source_path = os.path.abspath('/')
 
         importer = RawPythonFilesImporter(source_folder_full_path=valid_source_path,
-                                          hexagonal_composition=HexagonalComposition())
+                                          hexagonal_composition=HexagonalComposition(),
+                                          excluded_folders=[])
 
         self.assertEqual(valid_source_path, importer.source_folder_full_path)
 
     def test_import_project_when_project_exits_return_imported_project(self):
         importer = RawPythonFilesImporter(source_folder_full_path=get_sample_correct_test_project_path(),
-                                          hexagonal_composition=HexagonalComposition())
+                                          hexagonal_composition=HexagonalComposition(),
+                                          excluded_folders=[])
         response = importer.import_raw_python_files()
 
         self.assertEqual(11, len(response))

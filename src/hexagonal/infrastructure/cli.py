@@ -6,7 +6,7 @@ from runpy import run_path
 import click
 
 from hexagonal.domain.hexagonal_error import HexagonalError
-from hexagonal.main import hexagonal_config
+from hexagonal.hexagonal_config import hexagonal_config
 from hexagonal.use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase, HexagonalCheckResponse
 from hexagonal.use_cases.generate_diagram_usecase import GenerateDiagramUseCase
 
@@ -38,7 +38,7 @@ def check(source_path, hexagonal_config_file):
     try:
         _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
 
-        checker = CheckProjectSanityUseCase(composition=hexagonal_config, source_folder=source_path)
+        checker = CheckProjectSanityUseCase(hexagonal_config=hexagonal_config, source_folder=source_path)
         response = checker.check()
         _print_check_response(response)
     except Exception as error:
@@ -96,7 +96,7 @@ def _import_hexagonal_config_file(hexagonal_config_file: str):
     if not os.path.isfile(hexagonal_config_file):
         click.echo('Project configuration file not found.')
         exit(1)
-    hexagonal_config.clear()
+    hexagonal_config.clear_layers()
     run_path(hexagonal_config_file)
 
 

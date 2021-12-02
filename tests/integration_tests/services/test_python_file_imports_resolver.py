@@ -24,8 +24,8 @@ class TestPythonFileImportsResolver(TestCase):
             project_folder_full_path=project_path,
         )
 
-        imports_resolver = PythonFileImportsResolver()
-        imported_modules = imports_resolver.resolve_imported_modules(raw_python_file=raw_python_file)
+        imports_resolver = PythonFileImportsResolver(raw_python_file=raw_python_file)
+        imported_modules = imports_resolver.resolve_imported_modules()
 
         self.assertEqual(len(imported_modules), 2)
         self.assertContainsItemWithSuffix(
