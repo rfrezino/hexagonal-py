@@ -37,7 +37,7 @@ def diagram(source_path, hexagonal_config_file):
 def check(source_path, hexagonal_config_file):
     def _build_response_message() -> str:
         return f'Hexagonal Architecture: Checked a project with {len(response.hexagonal_project.layers)} ' \
-               f'hexagonal layers, with {len(response.python_files)} python files ' \
+               f'hexagonal layers, {len(response.python_files)} python files ' \
                f'and found {len(response.errors)} errors.'
 
     try:

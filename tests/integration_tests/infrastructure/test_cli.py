@@ -15,7 +15,7 @@ class TestCli(TestCase):
                                        '--hexagonal_config_file', 'sanity_check_hexagonal_config.py'])
 
         expected_msg = 'Hexagonal Architecture: Checked a project with 4 hexagonal layers, ' \
-                       'with 25 python files and found 0 errors.'
+                       '25 python files and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
         self.assertIn(expected_msg, result.output)
 
@@ -25,7 +25,7 @@ class TestCli(TestCase):
         result = runner.invoke(check, ['--source_path', get_sample_correct_test_project_path()])
 
         expected_msg = 'Hexagonal Architecture: Checked a project with 4 hexagonal layers, ' \
-                       'with 11 python files and found 0 errors.'
+                       '11 python files and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
         self.assertIn(expected_msg, result.output)
 
