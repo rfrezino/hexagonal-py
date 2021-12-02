@@ -44,7 +44,7 @@ class TestPythonFileBuilder(TestCase):
         builder = RawPythonFileBuilder(file_full_path=valid_source_path, project_source_folder_full_path=project_folder)
         raw_python_file = builder.build()
 
-        self.assertEqual(valid_source_path, raw_python_file.full_path)
+        self.assertEqual(valid_source_path, raw_python_file.file_full_path)
         self.assertEqual('test_python_file_builder.py', raw_python_file.file_name)
         self.assertEqual(file_folder, raw_python_file.file_folder_full_path)
         self.assertEqual('/services', raw_python_file.relative_folder_path_from_project_folder)

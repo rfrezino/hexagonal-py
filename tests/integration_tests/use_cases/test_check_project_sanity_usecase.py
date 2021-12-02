@@ -24,7 +24,7 @@ class HexagonalSanityCheckUnitTest(TestCase):
                                  source_folder=expected_project_full_path)
 
         self.assertEqual(len(response.project.python_files), 8)
-        self.assertEqual(response.project.full_path, expected_project_full_path)
+        self.assertEqual(response.project.file_full_path, expected_project_full_path)
         self.assertEqual(len(response.errors), 1)
         self.assertEqual(response.errors[0].message,
                          'Wrong dependency flow. An inner layer is pointing to an outer layer.')
@@ -49,5 +49,5 @@ class HexagonalSanityCheckUnitTest(TestCase):
         response = usecase.check(composition=hexagonal_composition, source_folder=expected_project_full_path)
 
         self.assertEqual(len(response.project.python_files), 8)
-        self.assertEqual(response.project.full_path, expected_project_full_path)
+        self.assertEqual(response.project.file_full_path, expected_project_full_path)
         self.assertEqual(len(response.errors), 0)

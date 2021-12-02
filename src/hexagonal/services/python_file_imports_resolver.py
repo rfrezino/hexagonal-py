@@ -45,27 +45,27 @@ class PythonFileImportsResolver:
     _project_full_path: str
 
     def resolve_imported_modules(self, *, raw_python_file: RawPythonFile) -> List[str]:
-        if not os.path.isfile(raw_python_file.full_path):
-            raise Exception(f'Source file not found: {raw_python_file.full_path}')
+        if not os.path.isfile(raw_python_file.file_full_path):
+            raise Exception(f'Source file not found: {raw_python_file.file_full_path}')
 
         self._raw_python_file = raw_python_file
 
         all_modules = self._get_all_modules_source_paths()
 
-        if raw_python_file.full_path in all_modules:
-            all_modules.remove(raw_python_file.full_path)
+        if raw_python_file.file_full_path in all_modules:
+            all_modules.remove(raw_python_file.file_full_path)
 
         return all_modules
 
     def _get_all_modules_source_paths(self) -> List[str]:
         finder = ModuleFinder(path=[self._raw_python_file.project_folder_full_path])
-        finder.run_script(self._raw_python_file.full_path)
+        finder.run_script(self._raw_python_file.file_full_path)
 
         all_modules = []
         for module in finder.modules.values():
             all_modules.append(self.__get_module_file_name(module))
 
-        all_modules.extend(self._convert_bad_modules_into_paths(base_file_full_path=self._raw_python_file.full_path,
+        all_modules.extend(self._convert_bad_modules_into_paths(base_file_full_path=self._raw_python_file.file_full_path,
                                                                 bad_modules=list(finder.badmodules.keys())))
 
         return [value for value in all_modules if value is not None]

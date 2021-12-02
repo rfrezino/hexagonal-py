@@ -65,7 +65,7 @@ class RawPythonFilesImporter:
         for python_file in python_source_files:
             imported_python_file = self._import_python_file(python_file)
             if imported_python_file.layer_index is None:
-                logging.warning(f'File layer index is invalid: {imported_python_file.full_path}')
+                logging.warning(f'File layer index is invalid: {imported_python_file.file_full_path}')
                 continue
 
             valid_files.append(imported_python_file)

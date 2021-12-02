@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class RawPythonFile:
-    full_path: str
+    file_full_path: str
     file_name: str
     file_folder_full_path: str
     # For instance if the project is located at: /usr/project/
