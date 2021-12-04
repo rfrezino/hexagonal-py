@@ -2,12 +2,11 @@ from unittest import TestCase
 
 from hexagonal.domain.hexagonal_layer import HexagonalLayer
 from hexagonal.hexagonal_config import HexagonalConfig
-from hexagonal.services.hexagonal_composition import HexagonalComposition
-from hexagonal.use_cases.check_project_sanity_usecase import CheckProjectSanityUseCase
+from hexagonal.use_cases.check_project_coherence_usecase import CheckProjectCoherenceUseCase
 from tests.integration_tests.utils.utils import get_sample_wrong_test_project_path, get_sample_correct_test_project_path
 
 
-class HexagonalSanityCheckUnitTest(TestCase):
+class HexagonalCoherenceCheckUnitTest(TestCase):
 
     def test_check_when_project_has_wrong_dependencies_import_return_errors(self):
         expected_project_full_path = get_sample_wrong_test_project_path()
@@ -18,7 +17,7 @@ class HexagonalSanityCheckUnitTest(TestCase):
         hexagonal_config.add_inner_layer(HexagonalLayer(name='services', directories=['/services']))
         hexagonal_config.add_inner_layer(HexagonalLayer(name='domain', directories=['/domain']))
 
-        usecase = CheckProjectSanityUseCase(hexagonal_config=hexagonal_config,
+        usecase = CheckProjectCoherenceUseCase(hexagonal_config=hexagonal_config,
                                             source_folder=expected_project_full_path)
         response = usecase.check()
 
@@ -41,7 +40,7 @@ class HexagonalSanityCheckUnitTest(TestCase):
         hexagonal_config.add_inner_layer(HexagonalLayer(name='services', directories=['/services']))
         hexagonal_config.add_inner_layer(HexagonalLayer(name='domain', directories=['/domain']))
 
-        usecase = CheckProjectSanityUseCase(hexagonal_config=hexagonal_config, source_folder=expected_project_full_path)
+        usecase = CheckProjectCoherenceUseCase(hexagonal_config=hexagonal_config, source_folder=expected_project_full_path)
         response = usecase.check()
 
         self.assertEqual(11, len(response.python_files))

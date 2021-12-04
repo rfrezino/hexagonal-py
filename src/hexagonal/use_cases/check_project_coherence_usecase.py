@@ -18,7 +18,7 @@ class HexagonalCheckResponse:
     hexagonal_project: HexagonalProject
 
 
-class CheckProjectSanityUseCase:
+class CheckProjectCoherenceUseCase:
     _source_folder_full_path: str
     _source_folder: str
     _hexagonal_config: HexagonalConfig

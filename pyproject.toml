@@ -1,12 +1,12 @@
 [tool.poetry]
-name = "hexagonal-sanity-check"
-version = "0.0.21"
-description = """Hexagonal Sanity Check"""
+name = "hexagonal-coherence-check"
+version = "0.0.22"
+description = """Hexagonal Coherence Check"""
 readme = 'README.md'
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
 packages = [{ include = "hexagonal", from = "src"}]
-keywords = ["hexagonal architecture", "onion architecture", "enforce rules"]
-exclude = ["src/hexagonal/sanity_check_hexagonal_config.py"]
+keywords = ["hexagonal architecture", "onion architecture", "enforce rules", "coherence check"]
+exclude = ["src/hexagonal/hexagonal_project_config.py"]
 
 [tool.poetry.dependencies]
 python = "^3.7"

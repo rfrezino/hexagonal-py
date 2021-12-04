@@ -12,7 +12,7 @@ class TestCli(TestCase):
         # This tests check the consistency of this on project
         runner = CliRunner()
         result = runner.invoke(check, ['--source_path', get_project_path() + '/src/hexagonal',
-                                       '--hexagonal_config_file', 'sanity_check_hexagonal_config.py'])
+                                       '--hexagonal_config_file', 'hexagonal_project_config.py'])
 
         expected_msg = 'Hexagonal Architecture: Checked a project with 4 hexagonal layers, ' \
                        '25 python files and found 0 errors.'

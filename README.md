@@ -1,11 +1,11 @@
-# Hexagonal Sanity Check
+# Hexagonal Coherence Check
 
 This project checks if the dependency flow between the layers of the Hexagonal architecture defined 
 for this project was respected.
 
 ### How to install
 
-It can be easily installed via pip: `pip install hexagonal-sanity-check`
+It can be easily installed via pip: `pip install hexagonal-py`
 
 ### How to configure your project
 
