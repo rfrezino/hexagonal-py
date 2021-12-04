@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hexagonal-py"
-version = "0.0.22"
+version = "0.0.23"
 description = """Hexagonal Coherence Check"""
 readme = 'README.md'
 authors = ["rfrezino <rodrigofrezino@gmail.com>"]
