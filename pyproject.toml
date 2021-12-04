@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "hexagonal-coherence-check"
+name = "hexagonal-py"
 version = "0.0.22"
 description = """Hexagonal Coherence Check"""
 readme = 'README.md'
