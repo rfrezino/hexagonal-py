@@ -22,7 +22,7 @@ class TestHexagonalDependencyFlowChecker(TestCase):
                                    file_folder_full_path='/usr/src/project/adapter/lib1/',
                                    relative_folder_path_from_project_folder='/adapter/lib1',
                                    project_folder_full_path='/usr/src/project',
-                                   imported_modules=[]),
+                                   imported_modules=['/usr/src/project/adapter/lib2/file2.py']),
                         PythonFile(file_full_path='/usr/src/project/adapter/lib2/file2.py',
                                    file_name='file2.py',
                                    file_folder_full_path='/usr/src/project/adapter/lib2/',

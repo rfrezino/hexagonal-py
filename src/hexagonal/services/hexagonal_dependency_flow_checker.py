@@ -37,6 +37,11 @@ class HexagonalDependencyFlowChecker:
             result.extend(self._check_file(layer=layer, python_file=python_file))
         return result
 
+    @staticmethod
+    def _inner_layer_is_point_to_outer_layer(inner_layer: HexagonalProjectLayer,
+                                             outer_layer: HexagonalProjectLayer) -> bool:
+        return inner_layer.index < outer_layer.index
+
     def _check_file(self, *, layer: HexagonalProjectLayer, python_file: PythonFile) -> List[DependencyFlowError]:
         result = []
         for imported_module in python_file.imported_modules:
@@ -44,7 +49,7 @@ class HexagonalDependencyFlowChecker:
             if not module_layer:
                 continue
 
-            if layer.index < module_layer.index:
+            if self._inner_layer_is_point_to_outer_layer(inner_layer=layer, outer_layer=module_layer):
                 error = DependencyFlowError(
                     source_file=python_file,
                     source_file_layer=layer,
