@@ -8,6 +8,45 @@ from hexagonal.services.hexagonal_dependency_flow_checker import HexagonalDepend
 
 
 class TestHexagonalDependencyFlowChecker(TestCase):
+    def test_check_when_project_has_files_from_different_dir_groups_in_same_layer_should_return_error(self):
+        # Setup
+        project = HexagonalProject(
+            project_path='/usr/src/project', layers=[
+                HexagonalProjectLayer(
+                    index=1,
+                    name='Adapters',
+                    directories_groups=[['/adapter/lib1'], ['/adapter/lib2']],
+                    python_files=[
+                        PythonFile(file_full_path='/usr/src/project/adapter/lib1/file1.py',
+                                   file_name='file1.py',
+                                   file_folder_full_path='/usr/src/project/adapter/lib1/',
+                                   relative_folder_path_from_project_folder='/adapter/lib1',
+                                   project_folder_full_path='/usr/src/project',
+                                   imported_modules=[]),
+                        PythonFile(file_full_path='/usr/src/project/adapter/lib2/file2.py',
+                                   file_name='file2.py',
+                                   file_folder_full_path='/usr/src/project/adapter/lib2/',
+                                   relative_folder_path_from_project_folder='/adapter/lib2',
+                                   project_folder_full_path='/usr/src/project',
+                                   imported_modules=[])
+                    ])
+            ],
+            files_not_in_layers=[
+                PythonFile(file_full_path='/usr/src/project/docs/out.py', file_name='out.py',
+                           file_folder_full_path='/usr/src/project/docs/',
+                           relative_folder_path_from_project_folder='/docs',
+                           project_folder_full_path='/usr/src/project', imported_modules=[])])
+
+        # Execute
+        dependency_checker = HexagonalDependencyFlowChecker(hexagonal_project=project)
+        response = dependency_checker.check()
+
+        # Response
+        expected_result = DependencyFlowResponse(errors=[])
+
+        self.assertEqual(1, len(response.errors))
+        self.assertEqual(expected_result, response)
+
     def test_check_when_project_is_correct_should_not_return_errors(self):
         # Setup
         project = HexagonalProject(

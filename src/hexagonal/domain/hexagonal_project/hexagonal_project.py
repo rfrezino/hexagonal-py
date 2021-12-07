@@ -13,15 +13,14 @@ class HexagonalProject:
 
     def get_layer_for_file_path(self, file_full_path: str) -> Optional[HexagonalProjectLayer]:
         for layer in self.layers:
-            for python_file in layer.python_files:
-                if python_file.file_full_path == file_full_path:
-                    return layer
+            if layer.is_file_in_layer(file_full_path=file_full_path):
+                return layer
         return None
 
     def get_python_file(self, file_full_path: str) -> PythonFile:
         for layer in self.layers:
-            for python_file in layer.python_files:
-                if python_file.file_full_path == file_full_path:
-                    return python_file
+            python_file = layer.get_python_file(file_full_path=file_full_path)
+            if python_file:
+                return python_file
 
         raise Exception(f'File not found {file_full_path}')
