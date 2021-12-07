@@ -1,5 +1,5 @@
-from tests.integration_tests.utils.sample_projects.wrong_clear_arch_project.domain.person import Person
-from tests.integration_tests.utils.sample_projects.wrong_clear_arch_project.infrastructure.person_mysql_repository import PersonMySqlRepository
+from tests.integration_tests.utils.sample_projects.wrong_clean_arch_project.domain.person import Person
+from tests.integration_tests.utils.sample_projects.wrong_clean_arch_project.infrastructure.person_mysql_repository import PersonMySqlRepository
 
 
 class CreatePersonUseCase():

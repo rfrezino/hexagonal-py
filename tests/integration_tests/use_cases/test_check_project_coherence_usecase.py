@@ -2,13 +2,13 @@ from unittest import TestCase
 
 from hexagonal.hexagonal_config import HexagonalConfig
 from hexagonal.use_cases.check_project_coherence_usecase import CheckProjectCoherenceUseCase
-from tests.integration_tests.utils.utils import get_sample_wrong_test_project_path, get_sample_correct_test_project_path
+from tests.integration_tests.utils.utils import get_sample_wrong_test_clean_arch_project_path, get_sample_correct_test_clean_arch_project_path
 
 
 class HexagonalCoherenceCheckUnitTest(TestCase):
 
     def test_check_when_project_has_wrong_dependencies_import_return_errors(self):
-        expected_project_full_path = get_sample_wrong_test_project_path()
+        expected_project_full_path = get_sample_wrong_test_clean_arch_project_path()
 
         hexagonal_config = HexagonalConfig()
         hexagonal_config.add_inner_layer_with_dirs(layer_name='infrastructure', directories=['/infrastructure'])
@@ -30,7 +30,7 @@ class HexagonalCoherenceCheckUnitTest(TestCase):
         self.assertTrue(error.imported_module_problem.endswith('infrastructure/person_mysql_repository.py'))
 
     def test_check_when_project_has_right_dependencies_import_return_no_errors(self):
-        expected_project_full_path = get_sample_correct_test_project_path()
+        expected_project_full_path = get_sample_correct_test_clean_arch_project_path()
 
         hexagonal_config = HexagonalConfig()
         hexagonal_config.add_inner_layer_with_dirs(layer_name='infrastructure', directories=['/infrastructure'])

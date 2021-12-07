@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from hexagonal.services.hexagonal_composition import HexagonalComposition
 from hexagonal.services.raw_python_project_importer import RawPythonFilesImporter
-from tests.integration_tests.utils.utils import get_sample_correct_test_project_path
+from tests.integration_tests.utils.utils import get_sample_correct_test_clean_arch_project_path
 
 
 class TestPythonProjectImporter(TestCase):
@@ -37,7 +37,7 @@ class TestPythonProjectImporter(TestCase):
         self.assertEqual(valid_source_path, importer.source_folder_full_path)
 
     def test_import_project_when_project_exits_return_imported_project(self):
-        importer = RawPythonFilesImporter(source_folder_full_path=get_sample_correct_test_project_path(),
+        importer = RawPythonFilesImporter(source_folder_full_path=get_sample_correct_test_clean_arch_project_path(),
                                           hexagonal_composition=HexagonalComposition(),
                                           excluded_folders=[])
         response = importer.import_raw_python_files()

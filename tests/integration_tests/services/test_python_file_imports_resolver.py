@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from hexagonal.domain.raw_python_file import RawPythonFile
 from hexagonal.services.python_file_imports_resolver import PythonFileImportsResolver
-from tests.integration_tests.utils.utils import get_sample_correct_test_project_path
+from tests.integration_tests.utils.utils import get_sample_correct_test_clean_arch_project_path
 
 
 class TestPythonFileImportsResolver(TestCase):
@@ -13,7 +13,7 @@ class TestPythonFileImportsResolver(TestCase):
             raise Exception(f'Item with suffix {expected_suffix} not found in {item_list}')
 
     def test_resolve_imported_modules_when_file_is_valid_return_list_of_imported_modules(self):
-        project_path = get_sample_correct_test_project_path()
+        project_path = get_sample_correct_test_clean_arch_project_path()
         file_path = project_path + '/usecases/create_person_usecase.py'
 
         raw_python_file = RawPythonFile(
