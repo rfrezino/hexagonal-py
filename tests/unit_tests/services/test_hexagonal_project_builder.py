@@ -36,14 +36,14 @@ class TestHexagonalProjectBuilder(TestCase):
                        )
         ]
         hexagonal_composition = HexagonalComposition()
-        entities = HexagonalLayer(name='Domain Entities', directories=['/domain/entities'])
-        use_cases = HexagonalLayer(name='Use Cases', directories=['/use_case'])
+        entities = HexagonalLayer(name='Domain Entities', directories_groups=[['/domain/entities']])
+        use_cases = HexagonalLayer(name='Use Cases', directories_groups=[['/use_case']])
         hexagonal_composition + use_cases >> entities
 
         entities_layer = HexagonalProjectLayer(
             index=1,
             name='Domain Entities',
-            directories=['/domain/entities'],
+            directories_groups=[['/domain/entities']],
             python_files=[
                 PythonFile(file_full_path='/usr/src/project/domain/entities/person.py',
                            file_name='person.py',
@@ -55,7 +55,7 @@ class TestHexagonalProjectBuilder(TestCase):
         use_cases_layer = HexagonalProjectLayer(
             index=2,
             name='Use Cases',
-            directories=['/use_case'],
+            directories_groups=[['/use_case']],
             python_files=[
                 PythonFile(file_full_path='/usr/src/project/use_case/create_person.py',
                            file_name='create_person.py',
@@ -88,7 +88,7 @@ class TestHexagonalProjectBuilder(TestCase):
                                      project_folder_full_path='/usr/src/invoicing', imported_modules=[])
 
         hexagonal_composition = HexagonalComposition()
-        adapters = HexagonalLayer(name='Adapters', directories=['/adapters'])
+        adapters = HexagonalLayer(name='Adapters', directories_groups=[['/adapters']])
         hexagonal_composition + adapters
 
         # Execute
@@ -99,7 +99,7 @@ class TestHexagonalProjectBuilder(TestCase):
         expected_result = HexagonalProject(
             project_path='/usr/src/invoicing',
             layers=[
-                HexagonalProjectLayer(index=1, name='Adapters', directories=['/adapters'],
+                HexagonalProjectLayer(index=1, name='Adapters', directories_groups=[['/adapters']],
                                       python_files=[invoice_py_file])],
             files_not_in_layers=[])
 

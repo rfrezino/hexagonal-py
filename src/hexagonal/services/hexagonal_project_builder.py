@@ -36,7 +36,7 @@ class HexagonalProjectBuilder:
             project_layer = HexagonalProjectLayer(
                 index=idx + 1,
                 name=composition_layer.name,
-                directories=composition_layer.directories,
+                directories_groups=composition_layer.directories_groups,
                 python_files=[]
             )
             result.append(project_layer)
@@ -48,9 +48,10 @@ class HexagonalProjectBuilder:
         for python_file in self._python_files:
             for layer in project_layers:
                 relative_path = python_file.relative_folder_path_from_project_folder
-                if any(relative_path.startswith(layer_dir) for layer_dir in layer.directories):
-                    layer.python_files.append(python_file)
-                    break
+                for dirs in layer.directories_groups:
+                    if any(relative_path.startswith(layer_dir) for layer_dir in dirs):
+                        layer.python_files.append(python_file)
+                        break
 
     def _get_files_without_layers(self, project_layers: List[HexagonalProjectLayer]) -> List[PythonFile]:
         result = []
@@ -58,9 +59,10 @@ class HexagonalProjectBuilder:
             file_add = False
             for layer in project_layers:
                 relative_path = python_file.relative_folder_path_from_project_folder
-                if any(relative_path.startswith(layer_dir) for layer_dir in layer.directories):
-                    file_add = True
-                    break
+                for dirs in layer.directories_groups:
+                    if any(relative_path.startswith(layer_dir) for layer_dir in dirs):
+                        file_add = True
+                        break
 
             if not file_add:
                 result.append(python_file)

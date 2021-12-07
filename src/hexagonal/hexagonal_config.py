@@ -16,6 +16,15 @@ class HexagonalConfig:
         self._layers.append(layer)
         return self
 
+    def add_inner_layer_with_dirs(self, layer_name: str, directories: List[str]) -> 'HexagonalConfig':
+        self._layers.append(HexagonalLayer(name=layer_name, directories_groups=[directories]))
+        return self
+
+    def add_inner_layer_with_dirs_groups(self, layer_name: str,
+                                         directories_groups: List[List[str]]) -> 'HexagonalConfig':
+        self._layers.append(HexagonalLayer(name=layer_name, directories_groups=directories_groups))
+        return self
+
     def clear_layers(self):
         self._layers.clear()
 

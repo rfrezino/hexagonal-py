@@ -13,10 +13,10 @@ class TestGenerateDiagramUseCase(TestCase):
         temp_dir = TemporaryDirectory()
         diagram_path = temp_dir.name + '/outputfile'
 
-        infrastructure_layer = HexagonalLayer(name='infrastructure', directories=['/infrastructure'])
-        use_cases_layer = HexagonalLayer(name='use_cases', directories=['/usecases'])
-        services_layer = HexagonalLayer(name='services', directories=['/services'])
-        domain_layer = HexagonalLayer(name='domain', directories=['/domain'])
+        infrastructure_layer = HexagonalLayer(name='infrastructure', directories_groups=[['/infrastructure']])
+        use_cases_layer = HexagonalLayer(name='use_cases', directories_groups=[['/usecases']])
+        services_layer = HexagonalLayer(name='services', directories_groups=[['/services']])
+        domain_layer = HexagonalLayer(name='domain', directories_groups=[['/domain']])
 
         hexagonal_composition = HexagonalComposition()
         hexagonal_composition + infrastructure_layer >> use_cases_layer >> services_layer >> domain_layer

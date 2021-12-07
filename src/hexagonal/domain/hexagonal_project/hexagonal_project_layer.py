@@ -7,5 +7,5 @@ from hexagonal.domain.python_file import PythonFile
 class HexagonalProjectLayer:
     index: int
     name: str
-    directories: List[str]
+    directories_groups: List[List[str]]
     python_files: List[PythonFile]

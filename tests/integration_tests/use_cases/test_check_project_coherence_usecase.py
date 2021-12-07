@@ -12,13 +12,13 @@ class HexagonalCoherenceCheckUnitTest(TestCase):
         expected_project_full_path = get_sample_wrong_test_project_path()
 
         hexagonal_config = HexagonalConfig()
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='infrastructure', directories=['/infrastructure']))
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='use_cases', directories=['/usecases']))
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='services', directories=['/services']))
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='domain', directories=['/domain']))
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='infrastructure', directories=['/infrastructure'])
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='use_cases', directories=['/usecases'])
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='services', directories=['/services'])
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='domain', directories=['/domain'])
 
         usecase = CheckProjectCoherenceUseCase(hexagonal_config=hexagonal_config,
-                                            source_folder=expected_project_full_path)
+                                               source_folder=expected_project_full_path)
         response = usecase.check()
 
         self.assertEqual(11, len(response.python_files))
@@ -35,12 +35,13 @@ class HexagonalCoherenceCheckUnitTest(TestCase):
         expected_project_full_path = get_sample_correct_test_project_path()
 
         hexagonal_config = HexagonalConfig()
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='infrastructure', directories=['/infrastructure']))
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='use_cases', directories=['/usecases']))
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='services', directories=['/services']))
-        hexagonal_config.add_inner_layer(HexagonalLayer(name='domain', directories=['/domain']))
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='infrastructure', directories=['/infrastructure'])
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='use_cases', directories=['/usecases'])
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='services', directories=['/services'])
+        hexagonal_config.add_inner_layer_with_dirs(layer_name='domain', directories=['/domain'])
 
-        usecase = CheckProjectCoherenceUseCase(hexagonal_config=hexagonal_config, source_folder=expected_project_full_path)
+        usecase = CheckProjectCoherenceUseCase(hexagonal_config=hexagonal_config,
+                                               source_folder=expected_project_full_path)
         response = usecase.check()
 
         self.assertEqual(11, len(response.python_files))
