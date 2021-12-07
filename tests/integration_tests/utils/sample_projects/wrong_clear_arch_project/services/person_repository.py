@@ -1,6 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from tests.integration_tests.utils.sample_projects.wrong_project.domain.person import Person
+from tests.integration_tests.utils.sample_projects.wrong_clear_arch_project.domain.person import Person
 
 
 class PersonRepository(ABCMeta):

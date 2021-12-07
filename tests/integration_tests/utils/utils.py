@@ -6,8 +6,8 @@ def get_integration_tests_path():
 
 
 def get_sample_wrong_test_project_path():
-    return get_integration_tests_path() + '/utils/sample_projects/wrong_project'
+    return get_integration_tests_path() + '/utils/sample_projects/wrong_clear_arch_project'
 
 
 def get_sample_correct_test_project_path():
-    return get_integration_tests_path() + '/utils/sample_projects/correct_project'
+    return get_integration_tests_path() + '/utils/sample_projects/correct_clear_arch_project'

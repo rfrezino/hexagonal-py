@@ -28,8 +28,5 @@ class TestPythonFileImportsResolver(TestCase):
         imported_modules = imports_resolver.resolve_imported_modules()
 
         self.assertEqual(len(imported_modules), 2)
-        self.assertContainsItemWithSuffix(
-            'tests/integration_tests/utils/sample_projects/correct_project/domain/person.py', imported_modules)
-        self.assertContainsItemWithSuffix(
-            'tests/integration_tests/utils/sample_projects/correct_project/services/person_repository.py',
-            imported_modules)
+        self.assertContainsItemWithSuffix('/domain/person.py', imported_modules)
+        self.assertContainsItemWithSuffix('services/person_repository.py', imported_modules)
