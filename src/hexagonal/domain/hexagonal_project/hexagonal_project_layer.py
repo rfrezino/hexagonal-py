@@ -17,6 +17,17 @@ class HexagonalProjectLayer:
                 return python_file
         return None
 
+    def get_directory_group_index_for_file(self, relative_folder_path_from_project_folder: str) -> int:
+        if len(self.directories_groups) == 1:
+            return 0
+
+        for dir_group_index, dir_group in enumerate(self.directories_groups):
+            for dir_name in dir_group:
+                if dir_name == relative_folder_path_from_project_folder:
+                    return dir_group_index + 1
+
+        return 0
+
     def is_file_in_layer(self, file_full_path: str) -> bool:
         if self.get_python_file(file_full_path=file_full_path):
             return True
