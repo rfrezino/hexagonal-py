@@ -19,13 +19,14 @@ def cli():
 @click.command()
 @click.option('--source_path', help='Where main source folder is located.', required=True)
 @click.option('--hexagonal_config_file', default='hexagonal_config.py', help="Hexagonal configuration file's name.")
-def diagram(source_path, hexagonal_config_file):
+@click.option('--show', default=True, help="Show diagram file upon creation.")
+def diagram(source_path, hexagonal_config_file, show):
     try:
         _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
 
         hexa_diagram = GenerateDiagramUseCase()
-        hexa_diagram.execute(project_name='Hexagonal Architecture Diagram', hexagonal_composition=hexagonal_config,
-                             show=True)
+        hexa_diagram.execute(project_name='Hexagonal Architecture Diagram', hexagonal_config=hexagonal_config,
+                             show=show)
     except Exception as error:
         click.echo(f'Error while generating project\'s diagram: "{error}"')
         exit(1)

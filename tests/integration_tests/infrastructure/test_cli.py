@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from click.testing import CliRunner
 
-from hexagonal.infrastructure.cli import check
+from hexagonal.infrastructure.cli import check, diagram
 from tests.integration_tests.utils.utils import get_sample_correct_test_clean_arch_project_path, \
     get_sample_wrong_test_clean_arch_project_path, get_sample_correct_test_hexa_arch_project_path, \
     get_sample_wrong_test_hexa_arch_project_path
@@ -57,3 +57,13 @@ class TestCli(TestCase):
         self.assertEqual(result.exit_code, 1)
         self.assertIn('A file from a directory group is pointing to a file in another directory group in same layer.',
                       result.output)
+
+    def test_cli_run_diagrams_should_return_no_errors_for_correct_hexa_project(self):
+        # This tests check the consistency of this on project
+        runner = CliRunner()
+        result = runner.invoke(diagram, ['--source_path', get_sample_correct_test_hexa_arch_project_path(),
+                                         '--show', False])
+
+        expected_msg = "Checking project at"
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn(expected_msg, result.output)
