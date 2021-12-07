@@ -15,6 +15,7 @@ class DependencyFlowError:
     group_inter_dependency: bool
 
 
+
 @dataclass
 class DependencyFlowResponse:
     errors: List[DependencyFlowError]

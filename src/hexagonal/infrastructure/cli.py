@@ -82,6 +82,13 @@ def _print_error(error_index: int, error: HexagonalError):
         click.echo('## First fix the [ERROR 1] and re-run the check. '
                    'Follows errors can be cascading from it. \n')
 
+    if error.group_inter_dependency:
+        click.echo(f'[ERROR {error_index + 1}] Hexagonal Architecture: {error.message}')
+        click.echo(f'    Cross modules dependency in layer: {error.inner_layer_name}')
+        click.echo(f'    Python file: {error.python_file_problem}')
+        click.echo(f'    Outer Module : {error.imported_module_problem}')
+        return
+
     click.echo(f'[ERROR {error_index + 1}] Hexagonal Architecture: {error.message}')
     click.echo(f'    Wrong flow: {error.inner_layer_name} -> {error.outer_layer_name}')
     click.echo(f'    Python file: {error.python_file_problem}')

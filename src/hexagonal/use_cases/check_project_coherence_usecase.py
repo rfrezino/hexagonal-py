@@ -63,11 +63,20 @@ class CheckProjectCoherenceUseCase:
     def _convert_flow_errors(errors: List[DependencyFlowError]) -> List[HexagonalError]:
         result = []
         for error in errors:
-            new_error = HexagonalError(message='Wrong dependency flow. An inner layer is pointing to an outer layer.',
-                                       outer_layer_name=error.imported_module_layer.name,
-                                       inner_layer_name=error.source_file_layer.name,
-                                       python_file_problem=error.source_file.file_full_path,
-                                       imported_module_problem=error.imported_module.file_full_path)
+
+            if error.group_inter_dependency:
+                message = 'A file from a directory group is pointing to a file in another directory group in same layer.'
+            else:
+                message = 'Wrong dependency flow. An inner layer is pointing to an outer layer.'
+
+            new_error = HexagonalError(
+                message=message,
+                outer_layer_name=error.imported_module_layer.name,
+                inner_layer_name=error.source_file_layer.name,
+                python_file_problem=error.source_file.file_full_path,
+                imported_module_problem=error.imported_module.file_full_path,
+                group_inter_dependency=error.group_inter_dependency
+            )
             result.append(new_error)
 
         return result

@@ -8,3 +8,4 @@ class HexagonalError:
     inner_layer_name: str
     python_file_problem: str
     imported_module_problem: str
+    group_inter_dependency: bool
