@@ -1,4 +1,3 @@
-from hexagonal.domain.hexagonal_layer import HexagonalLayer
 from hexagonal.hexagonal_config import hexagonal_config
 
 hexagonal_config.add_inner_layer_with_dirs(layer_name='infrastructure', directories=['/infrastructure'])

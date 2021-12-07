@@ -61,12 +61,12 @@ class HexagonalDependencyFlowChecker:
 
     def _check_file(self, *, layer: HexagonalProjectLayer, python_file: PythonFile) -> List[DependencyFlowError]:
         result = []
-        for imported_module in python_file.imported_modules:
-            module_layer = self._hexagonal_project.get_layer_for_file_path(file_full_path=imported_module)
+        for imported_module_path in python_file.imported_modules:
+            module_layer = self._hexagonal_project.get_layer_for_file_path(file_full_path=imported_module_path)
             if not module_layer:
                 continue
 
-            imported_module = self._hexagonal_project.get_python_file(file_full_path=imported_module)
+            imported_module = self._hexagonal_project.get_python_file(file_full_path=imported_module_path)
 
             if self._is_inner_layer_is_point_to_outer_layer(inner_layer=layer, outer_layer=module_layer):
                 error = DependencyFlowError(
