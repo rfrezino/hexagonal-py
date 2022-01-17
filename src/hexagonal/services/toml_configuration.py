@@ -13,7 +13,7 @@ class TomlConfiguration:
     def load_from_file(self, file_path: str):
         pass
 
-    def load_from_toml_string(self, *, content: str) -> MutableMapping[str, Any]:
+    def load_from_string(self, *, content: str) -> MutableMapping[str, Any]:
         self._configuration = toml.loads(content)
         return self._configuration
 
