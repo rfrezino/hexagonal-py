@@ -17,7 +17,7 @@ class TestCli(TestCase):
                                        '--hexagonal_config_file', 'hexagonal_project_config.py'])
 
         expected_msg = 'Hexagonal Architecture: Checked a project with 4 hexagonal layers, ' \
-                       '25 python files and found 0 errors.'
+                       '26 python files and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
         self.assertIn(expected_msg, result.output)
 
@@ -73,7 +73,7 @@ class TestCli(TestCase):
         runner = CliRunner()
         result = runner.invoke(check, ['--source_path', get_sample_correct_test_hexa_arch_project_toml_path()])
 
-        expected_msg = 'Hexagonal Architecture: Checked a project with 3 hexagonal layers, 11 python files ' \
+        expected_msg = 'Hexagonal Architecture: Checked a project with 3 hexagonal layers, 10 python files ' \
                        'and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
         self.assertIn(expected_msg, result.output)

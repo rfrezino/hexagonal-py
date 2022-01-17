@@ -5,10 +5,11 @@ excluded_dirs = ['*/test']
 name = 'domain'
 directories_groups = [['/domain']]
 
+[tool.hexagonalpy.layer.3]
+name = 'adapters'
+directories_groups = [['/adapters/new_printer'], ['/adapters/old_printer']]
+
 [tool.hexagonalpy.layer.2]
 name = 'port'
 directories_groups = [['/port']]
 
-[tool.hexagonalpy.layer.3]
-name = 'adapters'
-directories_groups = [['/adapters/new_printer'], ['/adapters/old_printer']]
