@@ -33,7 +33,7 @@ class TomlConfiguration:
         except KeyError:
             return []
 
-    def layers(self) -> []:
+    def layers(self) -> List[Any]:
         try:
             result = []
             sorted_keys = list(self._configuration['tool']['hexagonalpy']['layer'].keys())
