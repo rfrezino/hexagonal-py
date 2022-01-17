@@ -5,7 +5,7 @@ from click.testing import CliRunner
 from hexagonal.infrastructure.cli import check, diagram
 from tests.integration_tests.utils.utils import get_sample_correct_test_clean_arch_project_path, \
     get_sample_wrong_test_clean_arch_project_path, get_sample_correct_test_hexa_arch_project_path, \
-    get_sample_wrong_test_hexa_arch_project_path
+    get_sample_wrong_test_hexa_arch_project_path, get_sample_correct_test_hexa_arch_project_toml_path
 from tests.utils import get_project_path
 
 
@@ -65,5 +65,15 @@ class TestCli(TestCase):
                                          '--show', False])
 
         expected_msg = "Checking project at"
+        self.assertEqual(result.exit_code, 0)
+        self.assertIn(expected_msg, result.output)
+
+    def test_cli_run_check_should_return_no_errors_for_correct_hexa_project_toml(self):
+        # This tests check the consistency of this on project
+        runner = CliRunner()
+        result = runner.invoke(check, ['--source_path', get_sample_correct_test_hexa_arch_project_toml_path()])
+
+        expected_msg = 'Hexagonal Architecture: Checked a project with 3 hexagonal layers, 11 python files ' \
+                       'and found 0 errors.'
         self.assertEqual(result.exit_code, 0)
         self.assertIn(expected_msg, result.output)

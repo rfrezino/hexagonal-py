@@ -19,3 +19,7 @@ def get_sample_wrong_test_hexa_arch_project_path():
 
 def get_sample_correct_test_hexa_arch_project_path():
     return get_integration_tests_path() + '/utils/sample_projects/correct_hexa_arch_project'
+
+
+def get_sample_correct_test_hexa_arch_project_toml_path():
+    return get_integration_tests_path() + '/utils/sample_projects/correct_hexa_arch_project_toml'

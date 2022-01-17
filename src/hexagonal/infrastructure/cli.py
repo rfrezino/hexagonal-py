@@ -104,6 +104,19 @@ def _validate_project_source_path(source_path: str):
     sys.path.append(source_path)
 
 
+def _process_cli_arguments(source_path: str, hexagonal_config_file: str):
+    source_path = os.path.abspath(source_path)
+
+    _validate_project_source_path(source_path=source_path)
+    _process_configuration(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
+
+
+def _process_configuration(source_path: str, hexagonal_config_file: str):
+    hexagonal_config_file = source_path + '/' + hexagonal_config_file
+
+    _import_hexagonal_config_file(hexagonal_config_file=hexagonal_config_file)
+
+
 def _import_hexagonal_config_file(hexagonal_config_file: str):
     click.echo(f'Checking hexagonal configuration file at: {hexagonal_config_file}')
     if not os.path.isfile(hexagonal_config_file):
@@ -111,14 +124,6 @@ def _import_hexagonal_config_file(hexagonal_config_file: str):
         exit(1)
     hexagonal_config.clear_layers()
     run_path(hexagonal_config_file)
-
-
-def _process_cli_arguments(source_path: str, hexagonal_config_file: str):
-    source_path = os.path.abspath(source_path)
-    hexagonal_config_file = source_path + '/' + hexagonal_config_file
-
-    _validate_project_source_path(source_path=source_path)
-    _import_hexagonal_config_file(hexagonal_config_file=hexagonal_config_file)
 
 
 cli.add_command(check)
