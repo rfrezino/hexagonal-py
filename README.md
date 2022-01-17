@@ -9,24 +9,17 @@ It can be easily installed via pip: `pip install hexagonal-py`
 
 ### How to configure your project
 
-First it's necessary to define your hexagonal layers and their order.
-The tool expects a default file name on your source folder dir with the name `hexagonal_config.py`.
+There are two ways to configure `hexagonal-py`:
+1. Using `pyproject.toml` (recommended)
+2. Using `hexagonal_config.py`, which is expected to be on your main source folder. 
 
-1. First you create the Hexagonal Layers you have on your system via the class name HexagonalLayer.
-There are two arguments: 
-   - `name`: It can be any name, `domain`, `frontend`, `infrastructure`, or any name you used for your layers.
-   - `usecases`: This is the name of the directory the files related to this layer as storage. It's not the full path, 
-it's the directory name relative path from source.
-
-2. Import `hexagonal_config` on your file, and define the order with `+` (add layers)
-then `>>`(set the sequence of the layers). The most to the left layers is the most outer layer, while
-the most to the right layer is the most inner layer.
-
-Example, for this folder structure:
+It's necessary to define your hexagonal layers and their order.
+Given for example, the project structure below:
 ```
+pyproject.toml (Optinal)
 . src
 ├── __init__.py
-├── hexagonal_config.py
+├── hexagonal_config.py (Optional)
 ├── domain
 │   ├── __init__.py
 │   ├── __pycache__
@@ -43,8 +36,34 @@ Example, for this folder structure:
     └── create_person_usecase.py
 .tests    
 ```
-The file:
+General aspects:
+1. Existing layers: `domain`, `infrastructure`, `services`, `usecases`.
+2. Which should respect the following dependency flow: `infrastructure` -> `usecases` -> `services` -> `domain`
+3. Exclude `tests` from checks
 
+If you are using `pyproject.toml`, you would have this:
+```toml
+[tool.hexagonalpy]
+excluded_dirs = ['/tests']
+
+[tool.hexagonalpy.layer.1]
+name = 'Domain'
+directories_groups = [['/domain']]
+
+[tool.hexagonalpy.layer.2]
+name = 'Services'
+directories_groups = [['/services']]
+
+[tool.hexagonalpy.layer.3]
+name = 'Use Cases'
+directories_groups = [['/usecases']]
+
+[tool.hexagonalpy.layer.4]
+name = 'Infrastructure'
+directories_groups = [['/infrastructure']]
+```
+
+If you are using `hexagonal_config.py`:
 ```python
 from hexagonal.hexagonal_config import hexagonal_config
 
@@ -56,6 +75,38 @@ hexagonal_config.add_inner_layer_with_dirs(layer_name='domain', directories=['/d
 hexagonal_config.excluded_dirs = ['/tests']
 ```
 
+#### Extra content
+
+1. excluded_dirs  
+List of directories that you want to exclude from the `hexagonal-py` validation.  
+Syntax: `excluded_dirs = ['/tests', '/another_folder', '/another_folder2']`
+
+
+2. Layers  
+List of layers you defined in your project. 
+There are 3 aspects you need to fill in for a layer: `layer order`, `name`, `directories_groups`.
+
+2.1. Layer order: The number of the layers tells the order of the dependency flow between them. 
+Where the most inner layer is `1` and the most outer layer is the greater number. Example:
+
+```toml
+[tool.hexagonalpy.layer.1] # Layer 1, as it's the most inner layer, and it can't point to any other layer but all the 
+                           # other layers can point to it.
+name = 'domain'
+directories_groups = [['/domain']]
+```
+
+2.2. Name: The readable name of the layer, that will be used for documentation, internal messages etc.
+
+2.3. Directories_groups: It's a list of a list. You can specify which folders belong to the given layer, and you can also 
+define that some folders can't point to other folders inside the same layer. For instance, the `MySql` and `Postgres` 
+components belongs to `Infrastructure Layer` but **can't** refer to each other.
+
+```toml
+[tool.hexagonalpy.layer.4] 
+name = 'Infrastructure'
+directories_groups = [['/Infrastructure/MySql'],['Infrastructure/Postgres']]
+```
 
 ### Generating the Project Diagram
 This command generate a visual diagram show the composition of your hexagonal layers.
@@ -66,11 +117,11 @@ For Mac you can ``brew install graphviz``.
 For other, check the documentation https://graphviz.org/download/. 
 
 #### CMD
-`hexagonal diagram --source_path ./` 
+`hexagonal diagram --project_path ./ --source_path ./src` 
 
 ### Checking Project's Hexagonal Integrity 
 This checks if the correct flow of the dependencies -from outer to inner layer- was respected.
 
 #### CMD
-`hexagonal check --source_path ./`
+`hexagonal check --project_path ./ --source_path ./src`
 
