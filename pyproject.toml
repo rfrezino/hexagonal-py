@@ -12,6 +12,7 @@ exclude = ["src/hexagonal/hexagonal_project_config.py"]
 python = "^3.7"
 diagrams = "^0.20.0"
 click = "^8.0.3"
+toml = "^0.10.2"
 
 [tool.poetry.dev-dependencies]
 nose = "^1.3.7"
