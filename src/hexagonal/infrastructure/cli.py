@@ -19,12 +19,15 @@ def cli():
 
 
 @click.command()
+@click.option('--project_path', help='Main project folder.', required=True)
 @click.option('--source_path', help='Where main source folder is located.', required=True)
 @click.option('--hexagonal_config_file', default='hexagonal_config.py', help="Hexagonal configuration file's name.")
 @click.option('--show', default=True, help="Show diagram file upon creation.")
-def diagram(source_path, hexagonal_config_file, show):
+def diagram(project_path, source_path, hexagonal_config_file, show):
     try:
-        _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
+        _process_cli_arguments(project_path=project_path,
+                               source_path=source_path,
+                               hexagonal_config_file=hexagonal_config_file)
 
         hexa_diagram = GenerateDiagramUseCase()
         hexa_diagram.execute(project_name='Hexagonal Architecture Diagram', hexagonal_config=hexagonal_config,
@@ -35,16 +38,19 @@ def diagram(source_path, hexagonal_config_file, show):
 
 
 @click.command()
+@click.option('--project_path', help='Main project folder.', required=True)
 @click.option('--source_path', help='Where main source folder is located.', required=True)
 @click.option('--hexagonal_config_file', default='hexagonal_config.py', help="Hexagonal configuration file's name.")
-def check(source_path: str, hexagonal_config_file: str):
+def check(project_path: str, source_path: str, hexagonal_config_file: str):
     def _build_response_message() -> str:
         return f'Hexagonal Architecture: Checked a project with {len(response.hexagonal_project.layers)} ' \
                f'hexagonal layers, {len(response.python_files)} python files ' \
                f'and found {len(response.errors)} errors.'
 
     try:
-        _process_cli_arguments(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
+        _process_cli_arguments(project_path=project_path,
+                               source_path=source_path,
+                               hexagonal_config_file=hexagonal_config_file)
 
         checker = CheckProjectCoherenceUseCase(hexagonal_config=hexagonal_config, source_folder=source_path)
         response = checker.check()
@@ -106,26 +112,28 @@ def _validate_project_source_path(source_path: str):
     sys.path.append(source_path)
 
 
-def _process_cli_arguments(source_path: str, hexagonal_config_file: str):
+def _process_cli_arguments(*, project_path: str, source_path: str, hexagonal_config_file: str):
     source_path = os.path.abspath(source_path)
 
     _validate_project_source_path(source_path=source_path)
-    _process_configuration(source_path=source_path, hexagonal_config_file=hexagonal_config_file)
+    _process_configuration(project_path=project_path,
+                           source_path=source_path,
+                           hexagonal_config_file=hexagonal_config_file)
 
 
-def _process_configuration(source_path: str, hexagonal_config_file: str):
+def _process_configuration(project_path: str, source_path: str, hexagonal_config_file: str):
     hexagonal_config.clear_layers()
     hexagonal_config.excluded_dirs = []
 
-    if _import_configuration_from_toml_file(source_path=source_path):
+    if _import_configuration_from_toml_file(project_path=project_path):
         return False
 
     hexagonal_config_file = source_path + '/' + hexagonal_config_file
     _import_hexagonal_config_file(hexagonal_config_file=hexagonal_config_file)
 
 
-def _import_configuration_from_toml_file(source_path: str) -> bool:
-    toml_file = source_path + '/pyproject.toml'
+def _import_configuration_from_toml_file(project_path: str) -> bool:
+    toml_file = project_path + '/pyproject.toml'
     if not os.path.isfile(toml_file):
         return False
 
