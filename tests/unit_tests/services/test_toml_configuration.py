@@ -4,8 +4,7 @@ from hexagonal.services.toml_configuration import TomlConfiguration
 
 
 class TestTomlConfiguration(TestCase):
-    def test_load_from_toml_string_when_input_is_valid_should_parse(self):
-        toml_content = """
+    _valid_toml_configuration = """
 [tool.hexagonalpy]
 excluded_dirs = ['*/test']
 
@@ -21,9 +20,10 @@ directories_groups = [['/port']]
 name = 'adapters'
 directories_groups = [['/adapters/new_printer'], ['/adapters/old_printer']]"""
 
+    def test_load_from_toml_string_when_input_is_valid_should_parse(self):
         toml = TomlConfiguration()
 
-        result = toml.load_from_toml_string(content=toml_content)
+        result = toml.load_from_toml_string(content=self._valid_toml_configuration)
 
         expected_result = {'tool':
                                {'hexagonalpy':
