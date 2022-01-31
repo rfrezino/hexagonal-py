@@ -45,7 +45,7 @@ class RawPythonFilesImporter:
         for file in all_files:
             include_file = True
 
-            if '/.' in file:
+            if f'{os.sep}.' in file:
                 continue
 
             for excluded_dir in self._excluded_folders:

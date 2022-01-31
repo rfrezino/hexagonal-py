@@ -15,7 +15,6 @@ class DependencyFlowError:
     group_inter_dependency: bool
 
 
-
 @dataclass
 class DependencyFlowResponse:
     errors: List[DependencyFlowError]
@@ -44,7 +43,8 @@ class HexagonalDependencyFlowChecker:
                                                 outer_layer: HexagonalProjectLayer) -> bool:
         return inner_layer.index < outer_layer.index
 
-    def _are_files_in_same_layer(self, source_layer: HexagonalProjectLayer,
+    @staticmethod
+    def _are_files_in_same_layer(source_layer: HexagonalProjectLayer,
                                  module_layer: HexagonalProjectLayer) -> bool:
         return source_layer.index == module_layer.index
 

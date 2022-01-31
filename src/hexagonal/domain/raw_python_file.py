@@ -1,3 +1,4 @@
+import os.path
 from dataclasses import dataclass
 
 
@@ -12,3 +13,9 @@ class RawPythonFile:
     relative_folder_path_from_project_folder: str
     project_folder_full_path: str
 
+    def __post_init__(self):
+        self.file_full_path = os.path.normcase(os.path.normpath(self.file_full_path))
+        self.file_folder_full_path = os.path.normcase(os.path.normpath(self.file_folder_full_path))
+        self.relative_folder_path_from_project_folder = os.path.normcase(
+            os.path.normpath(self.relative_folder_path_from_project_folder))
+        self.project_folder_full_path = os.path.normcase(os.path.normpath(self.project_folder_full_path))

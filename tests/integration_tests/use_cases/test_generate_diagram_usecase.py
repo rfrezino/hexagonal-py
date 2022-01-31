@@ -1,4 +1,6 @@
 import os.path
+import sys
+import unittest
 from tempfile import TemporaryDirectory
 from time import sleep
 from unittest import TestCase
@@ -10,6 +12,7 @@ from hexagonal.use_cases.generate_diagram_usecase import GenerateDiagramUseCase
 
 
 class TestGenerateDiagramUseCase(TestCase):
+    @unittest.skipIf(sys.platform.startswith('win'), 'No Windows Support')
     def test_generate_diagram(self):
         temp_dir = TemporaryDirectory()
         diagram_path = temp_dir.name + '/outputfile'

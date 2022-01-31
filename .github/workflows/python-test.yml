@@ -18,8 +18,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ubuntu
-        run: sudo apt-get install -y graphviz
+      - name: Set up Graphviz
+        run: |
+         echo $RUNNER_OS
+         if [ "$RUNNER_OS" == "Linux" ]; then
+              sudo apt-get install -y graphviz
+         else
+             echo "Graphviz tests will only run for ubuntu-latest"
+         fi
+        shell: bash
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -32,7 +39,14 @@ jobs:
           poetry install
       - name: Run MyPy Checks
         run: poetry run mypy src
-      - name: Run Nose Tests
-        run: poetry run nosetests -v ./
+      - name: Run Tests
+        run: |
+          echo $RUNNER_OS
+          if [ "$RUNNER_OS" == "Linux" ]; then
+               poetry run python -m nose -v -w ./tests
+          else
+              poetry run python -m unittest -v
+          fi
+        shell: bash
 
 

@@ -34,10 +34,9 @@ class PythonFileImportsResolver:
             all_modules.append(self.__get_module_file_name(module))
 
         all_modules.extend(
-            self._convert_bad_modules_into_paths(base_file_full_path=self._raw_python_file.file_full_path,
-                                                 bad_modules=list(finder.badmodules.keys())))
+            self._convert_bad_modules_into_paths(bad_modules=list(finder.badmodules.keys())))
 
-        return [value for value in all_modules if value is not None]
+        return [os.path.normcase(os.path.normpath(value)) for value in all_modules if value is not None]
 
     @staticmethod
     def __get_module_file_name(module: Module) -> Optional[str]:
@@ -52,19 +51,19 @@ class PythonFileImportsResolver:
         except Exception:
             return None
 
-    def _convert_bad_modules_into_paths(self, base_file_full_path: str, bad_modules: List[str]) -> List[str]:
+    def _convert_bad_modules_into_paths(self, *, bad_modules: List[str]) -> List[str]:
         result = []
 
         for bad_module in bad_modules:
-            bad_module_file = bad_module.replace('.', '/') + '.py'
+            bad_module_file = bad_module.replace('.', os.sep) + '.py'
 
-            while '/' in bad_module_file:
-                full_bad_module_file = self._raw_python_file.project_folder_full_path + '/' + bad_module_file
+            while os.sep in bad_module_file:
+                full_bad_module_file = self._raw_python_file.project_folder_full_path + os.sep + bad_module_file
 
                 if os.path.isfile(full_bad_module_file):
-                    result.append(full_bad_module_file)
+                    result.append(os.path.normpath(full_bad_module_file))
                     break
 
-                bad_module_file = bad_module_file.split('/', 1)[1]
+                bad_module_file = bad_module_file.split(os.sep, 1)[1]
 
         return result

@@ -1,3 +1,5 @@
+import sys
+import unittest
 from unittest import TestCase
 
 from click.testing import CliRunner
@@ -48,8 +50,8 @@ class TestCli(TestCase):
             ]
         )
 
-        self.assertEqual(result.exit_code, 1)
         self.assertIn('Wrong dependency flow. An inner layer is pointing to an outer layer.', result.output)
+        self.assertEqual(result.exit_code, 1)
 
     def test_cli_run_check_should_return_no_errors_for_correct_hexa_project(self):
         # This tests check the consistency of this on project
@@ -72,10 +74,11 @@ class TestCli(TestCase):
             ['--project_path', get_sample_wrong_test_hexa_arch_project_path(),
              '--source_path', get_sample_wrong_test_hexa_arch_project_path()])
 
-        self.assertEqual(result.exit_code, 1)
         self.assertIn('A file from a directory group is pointing to a file in another directory group in same layer.',
                       result.output)
+        self.assertEqual(result.exit_code, 1)
 
+    @unittest.skipIf(sys.platform.startswith('win'), 'No Windows Support')
     def test_cli_run_diagrams_should_return_no_errors_for_correct_hexa_project(self):
         # This tests check the consistency of this on project
         runner = CliRunner()
