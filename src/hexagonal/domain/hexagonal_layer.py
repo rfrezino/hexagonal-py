@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import List
 
@@ -17,4 +18,5 @@ class HexagonalLayer:
                     raise Exception(f'Hexagonal Layer directory "{self.name}" must start with /. Example: "/domain"')
 
                 if dir.endswith('/'):
-                    raise Exception(f'Hexagonal Layer directory "{self.name}" must not finish with /. Example: "/domain"')
+                    raise Exception(
+                        f'Hexagonal Layer directory "{self.name}" must not finish with /. Example: "/domain"')

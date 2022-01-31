@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass
 from typing import List, Optional
 
@@ -23,7 +24,7 @@ class HexagonalProjectLayer:
 
         for dir_group_index, dir_group in enumerate(self.directories_groups):
             for dir_name in dir_group:
-                if dir_name == relative_folder_path_from_project_folder:
+                if os.path.normcase(os.path.normpath(dir_name)) == relative_folder_path_from_project_folder:
                     return dir_group_index + 1
 
         return 0
