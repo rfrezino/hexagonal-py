@@ -1,3 +1,5 @@
+import sys
+import unittest
 from unittest import TestCase
 
 from click.testing import CliRunner
@@ -76,6 +78,7 @@ class TestCli(TestCase):
         self.assertIn('A file from a directory group is pointing to a file in another directory group in same layer.',
                       result.output)
 
+    @unittest.skipIf(sys.platform.startswith('win'), 'No Windows Support')
     def test_cli_run_diagrams_should_return_no_errors_for_correct_hexa_project(self):
         # This tests check the consistency of this on project
         runner = CliRunner()

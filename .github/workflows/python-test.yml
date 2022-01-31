@@ -14,12 +14,17 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [ "3.8", "3.9"]
-        os: [ ubuntu-latest ]
+        os: [ ubuntu-latest, windows-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ubuntu
-        run: sudo apt-get install -y graphviz
+      - name: Set up Graphviz
+        run: |
+         if [ "$RUNNER_OS" == "Linux" ]; then
+              sudo apt-get install -y graphviz
+         elif [ "$RUNNER_OS" == "Windows" ]; then
+              echo "Graphviz tests will now run on Windows"
+         fi
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
