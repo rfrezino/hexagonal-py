@@ -18,7 +18,7 @@ class RawPythonFilesImporter:
 
     def __init__(self, source_folder_full_path: str, hexagonal_composition: HexagonalComposition,
                  excluded_folders: List[str]):
-        if not source_folder_full_path.startswith('/'):
+        if not os.path.isabs(source_folder_full_path):
             raise Exception("The param source_folder_full_path must have the source's folder full path.")
 
         if not os.path.isdir(source_folder_full_path):
