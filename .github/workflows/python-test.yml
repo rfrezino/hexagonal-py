@@ -20,11 +20,13 @@ jobs:
       - uses: actions/checkout@v2
       - name: Set up Graphviz
         run: |
-         if [ "$RUNNER_OS" == "Linux" ]; then
+         echo $RUNNER_OS
+         if [ "$RUNNER_OS" == "LINUX" ]; then
               sudo apt-get install -y graphviz
-         elif [ "$RUNNER_OS" == "Windows" ]; then
-              echo "Graphviz tests will now run on Windows"
+         else
+             echo "Graphviz tests will only run for ubuntu-latest"
          fi
+        shell: bash
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
