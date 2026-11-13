@@ -1,0 +1,162 @@
+{
+  "SchemaVersion": 2,
+  "Trivy": {
+    "Version": "0.76.2"
+  },
+  "ReportID": "01a1d5ad-1609-771a-b840-3562d51da1bb",
+  "CreatedAt": "2026-11-13T16:10:52.809471244Z",
+  "ArtifactName": ".",
+  "ArtifactType": "filesystem",
+  "Results": [
+    {
+      "Target": "poetry.lock",
+      "Class": "lang-pkgs",
+      "Type": "poetry",
+      "Packages": [
+        {
+          "ID": "click@8.0.3",
+          "Name": "click",
+          "Identifier": {
+            "PURL": "pkg:pypi/click@8.0.3",
+            "UID": "e687837d14905c1b"
+          },
+          "Version": "8.0.3",
+          "Relationship": "direct",
+          "DependsOn": [
+            "colorama@0.4.4",
+            "importlib-metadata@4.8.2"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "diagrams@0.20.0",
+          "Name": "diagrams",
+          "Identifier": {
+            "PURL": "pkg:pypi/diagrams@0.20.0",
+            "UID": "37977c2858852d2a"
+          },
+          "Version": "0.20.0",
+          "Relationship": "direct",
+          "DependsOn": [
+            "graphviz@0.16",
+            "jinja2@2.11.3"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "toml@0.10.2",
+          "Name": "toml",
+          "Identifier": {
+            "PURL": "pkg:pypi/toml@0.10.2",
+            "UID": "cc46bdf242a5143"
+          },
+          "Version": "0.10.2",
+          "Relationship": "direct",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "types-toml@0.10.3",
+          "Name": "types-toml",
+          "Identifier": {
+            "PURL": "pkg:pypi/types-toml@0.10.3",
+            "UID": "72bea6afb64b6224"
+          },
+          "Version": "0.10.3",
+          "Relationship": "direct",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "colorama@0.4.4",
+          "Name": "colorama",
+          "Identifier": {
+            "PURL": "pkg:pypi/colorama@0.4.4",
+            "UID": "db27a9c695d501d4"
+          },
+          "Version": "0.4.4",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "graphviz@0.16",
+          "Name": "graphviz",
+          "Identifier": {
+            "PURL": "pkg:pypi/graphviz@0.16",
+            "UID": "76c844bdfd214034"
+          },
+          "Version": "0.16",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "importlib-metadata@4.8.2",
+          "Name": "importlib-metadata",
+          "Identifier": {
+            "PURL": "pkg:pypi/importlib-metadata@4.8.2",
+            "UID": "157a6db339fe9cea"
+          },
+          "Version": "4.8.2",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "typing-extensions@4.0.0",
+            "zipp@3.6.0"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "jinja2@2.11.3",
+          "Name": "jinja2",
+          "Identifier": {
+            "PURL": "pkg:pypi/jinja2@2.11.3",
+            "UID": "44776aa14355766c"
+          },
+          "Version": "2.11.3",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "DependsOn": [
+            "markupsafe@2.0.1"
+          ],
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "markupsafe@2.0.1",
+          "Name": "markupsafe",
+          "Identifier": {
+            "PURL": "pkg:pypi/markupsafe@2.0.1",
+            "UID": "a7f3a1550814b9e4"
+          },
+          "Version": "2.0.1",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "typing-extensions@4.0.0",
+          "Name": "typing-extensions",
+          "Identifier": {
+            "PURL": "pkg:pypi/typing-extensions@4.0.0",
+            "UID": "7677079edb1b0c1f"
+          },
+          "Version": "4.0.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        },
+        {
+          "ID": "zipp@3.6.0",
+          "Name": "zipp",
+          "Identifier": {
+            "PURL": "pkg:pypi/zipp@3.6.0",
+            "UID": "384134d1e41bbcfa"
+          },
+          "Version": "3.6.0",
+          "Indirect": true,
+          "Relationship": "indirect",
+          "AnalyzedBy": "poetry"
+        }
+      ]
+    }
+  ]
+}
