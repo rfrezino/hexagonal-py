@@ -1,0 +1,41 @@
+description: Task image with Python 3.7, Poetry and Trivy for scanning this project's dependencies
+dockerfile: |
+  # Image for scanning hexagonal-py dependencies and files with Trivy.
+  # Provides Python 3.7 (pyproject.toml: python = "^3.7"), Poetry (no virtualenvs) and Trivy.
+  FROM ${GRU_BASE_IMAGE}
+
+  ARG PYTHON_VERSION=3.7
+  ARG UV_VERSION=0.4.30
+  ARG POETRY_VERSION=1.5.1
+  ARG TRIVY_VERSION=0.50.1
+
+  RUN set -eux; \
+      apt-get update; \
+      apt-get install -y --no-install-recommends ca-certificates curl tar python3 python3-pip; \
+      rm -rf /var/lib/apt/lists/*
+
+  # Install the required Python major.minor and make it the default python/pip.
+  RUN set -eux; \
+      pip3 install --no-cache-dir --break-system-packages "uv==${UV_VERSION}" 2>/dev/null \
+        || pip3 install --no-cache-dir "uv==${UV_VERSION}"; \
+      uv python install "${PYTHON_VERSION}" --install-dir /opt/python; \
+      py="$(ls -d /opt/python/cpython-${PYTHON_VERSION}.*/bin | head -n1)"; \
+      for b in "$py"/*; do ln -sf "$b" "/usr/local/bin/$(basename "$b")"; done; \
+      ln -sf "$py/python${PYTHON_VERSION}" /usr/local/bin/python; \
+      python --version; \
+      python -m ensurepip --upgrade || true
+
+  RUN set -eux; \
+      python -m pip install --no-cache-dir "poetry==${POETRY_VERSION}"; \
+      poetry config virtualenvs.create false; \
+      poetry --version
+
+  RUN set -eux; \
+      arch="$(dpkg --print-architecture)"; \
+      case "$arch" in amd64) t=64bit ;; arm64) t=ARM64 ;; *) echo "unsupported arch $arch" >&2; exit 1 ;; esac; \
+      curl -fsSL -o /tmp/trivy.tgz "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/trivy_${TRIVY_VERSION}_Linux-${t}.tar.gz"; \
+      tar -xzf /tmp/trivy.tgz -C /usr/local/bin trivy; \
+      rm -f /tmp/trivy.tgz; \
+      trivy --version
+
+  WORKDIR /workspace
