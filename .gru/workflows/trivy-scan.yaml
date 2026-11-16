@@ -1,0 +1,13 @@
+version: 1
+name: trivy-scan
+description: Scan the repository with Trivy (vulnerabilities, secrets, misconfigurations) and report the issues found.
+start: scan
+stages:
+  - id: scan
+    report_result: true
+    skill: |
+      Check this repository for Trivy issues, using the repository's files in your work directory.
+      1. If the trivy command is available, run `trivy fs --scanners vuln,secret,misconfig --format json --output work/artifacts/trivy-report.json .` and also `trivy fs --scanners vuln,secret,misconfig --severity HIGH,CRITICAL .` for a readable summary. If trivy is not installed and cannot be installed, say so plainly and instead review the dependency manifests (pyproject.toml, requirements*.txt, poetry.lock, Dockerfile, CI files) for known-vulnerable pins, hard-coded secrets and risky configuration, stating that this is a manual review and not a Trivy result.
+      2. Report the findings grouped by severity (CRITICAL, HIGH, MEDIUM, LOW): for each give the package or file, the installed version, the ID (CVE or Trivy rule), the fixed version when there is one, and a one-line remediation.
+      3. End with a short verdict: clean, or the number of issues per severity. Do not change any files in the repository.
+    on_success: end
